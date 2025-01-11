@@ -1,0 +1,142 @@
+[gd_scene load_steps=12 format=3 uid="uid://dxltm8yxw2x6b"]
+
+[ext_resource type="Script" path="res://enemy.gd" id="1_hl6sq"]
+[ext_resource type="Texture2D" uid="uid://b4nsrxrh8n0ws" path="res://guy.png" id="1_u1mvx"]
+[ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="2_jr5le"]
+
+[sub_resource type="Gradient" id="Gradient_tx54n"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kcd7s"]
+gradient = SubResource("Gradient_tx54n")
+fill = 1
+fill_from = Vector2(0.513761, 0.495413)
+fill_to = Vector2(0.518349, 1)
+
+[sub_resource type="Animation" id="Animation_tg0an"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_jg8r8"]
+resource_name = "shoot"
+length = 0.175
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.1, 0.166667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.174533, 0.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 5.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ifj76"]
+_data = {
+"RESET": SubResource("Animation_tg0an"),
+"shoot": SubResource("Animation_jg8r8")
+}
+
+[sub_resource type="Curve" id="Curve_i5gfa"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_c2stx"]
+curve = SubResource("Curve_i5gfa")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t0411"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 5.0
+alpha_curve = SubResource("CurveTexture_c2stx")
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_hl6sq")
+
+[node name="Guy" type="Sprite2D" parent="."]
+modulate = Color(0.699219, 0.106522, 0.106522, 1)
+scale = Vector2(5, 5)
+texture = ExtResource("1_u1mvx")
+
+[node name="Weapon" type="Node2D" parent="."]
+
+[node name="Blaster" type="Sprite2D" parent="Weapon"]
+position = Vector2(37.3451, 2.57365)
+scale = Vector2(4.48141, 5.1473)
+texture = ExtResource("2_jr5le")
+
+[node name="PointLight2D" type="PointLight2D" parent="Weapon"]
+position = Vector2(57, -5)
+color = Color(1, 0.959473, 0.351562, 1)
+energy = 0.0
+texture = SubResource("GradientTexture2D_kcd7s")
+texture_scale = 2.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Weapon"]
+libraries = {
+"": SubResource("AnimationLibrary_ifj76")
+}
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_t0411")
+texture = ExtResource("1_u1mvx")
+lifetime = 0.5
+speed_scale = 2.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(5, 5)
+polygon = PackedVector2Array(-8, 8, -8, -8, 8, -8, 8, 8)
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -33.5
+offset_top = -49.0
+offset_right = 33.5
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 0
+value = 100.0
+show_percentage = false
