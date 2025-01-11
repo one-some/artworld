@@ -1,11 +1,16 @@
-[gd_scene load_steps=19 format=4 uid="uid://l7y75grcut5v"]
+[gd_scene load_steps=25 format=4 uid="uid://l7y75grcut5v"]
 
 [ext_resource type="Script" path="res://bullet_container.gd" id="1_fold2"]
 [ext_resource type="Texture2D" uid="uid://b4nsrxrh8n0ws" path="res://guy.png" id="2_hxb8v"]
 [ext_resource type="Script" path="res://character.gd" id="2_l12iy"]
 [ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="4_273gj"]
 [ext_resource type="Texture2D" uid="uid://vugxi6xs4jd" path="res://tiles.png" id="5_awesi"]
+[ext_resource type="Script" path="res://pistol.gd" id="5_ilojw"]
+[ext_resource type="Script" path="res://player_cam.gd" id="5_yhyju"]
+[ext_resource type="AudioStream" uid="uid://q00g3g4iho27" path="res://sfx/pistol.mp3" id="6_2ix2l"]
 [ext_resource type="PackedScene" uid="uid://dxltm8yxw2x6b" path="res://enemy.tscn" id="6_wlofw"]
+[ext_resource type="PackedScene" uid="uid://d00vgqo7ylijr" path="res://ui.tscn" id="7_0bl1n"]
+[ext_resource type="AudioStream" uid="uid://c08wa5w15wd0c" path="res://sfx/getem.mp3" id="11_c7faf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s752b"]
 texture = ExtResource("5_awesi")
@@ -16,7 +21,7 @@ texture = ExtResource("5_awesi")
 sources/0 = SubResource("TileSetAtlasSource_s752b")
 
 [sub_resource type="Curve" id="Curve_vtsx4"]
-_data = [Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, -2.2784, 0, 0, Vector2(0.467085, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_rmp8t"]
@@ -92,6 +97,12 @@ _data = {
 "shoot": SubResource("Animation_jg8r8")
 }
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_qjdet"]
+random_pitch = 1.1
+random_volume_offset_db = 1.0
+streams_count = 1
+stream_0/stream = ExtResource("6_2ix2l")
+
 [sub_resource type="Curve" id="Curve_loujn"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -126,42 +137,57 @@ end_cap_mode = 2
 round_precision = 12
 antialiased = true
 
-[node name="Character" type="CharacterBody2D" parent="."]
+[node name="PlayerCharacter" type="CharacterBody2D" parent="." groups=["Player"]]
+unique_name_in_owner = true
 script = ExtResource("2_l12iy")
 
-[node name="Guy" type="Sprite2D" parent="Character"]
+[node name="Guy" type="Node2D" parent="PlayerCharacter"]
+
+[node name="Guy" type="Sprite2D" parent="PlayerCharacter/Guy"]
 scale = Vector2(5, 5)
 texture = ExtResource("2_hxb8v")
 
-[node name="Camera2D" type="Camera2D" parent="Character"]
+[node name="Weapon" type="Node2D" parent="PlayerCharacter/Guy"]
+scale = Vector2(1, 1)
+script = ExtResource("5_ilojw")
 
-[node name="Weapon" type="Node2D" parent="Character"]
-
-[node name="Blaster" type="Sprite2D" parent="Character/Weapon"]
+[node name="Blaster" type="Sprite2D" parent="PlayerCharacter/Guy/Weapon"]
 position = Vector2(37.3451, 2.57365)
 scale = Vector2(4.48141, 5.1473)
 texture = ExtResource("4_273gj")
 
-[node name="PointLight2D" type="PointLight2D" parent="Character/Weapon"]
+[node name="PointLight2D" type="PointLight2D" parent="PlayerCharacter/Guy/Weapon"]
 position = Vector2(57, -5)
 color = Color(1, 0.959473, 0.351562, 1)
 energy = 0.0
 texture = SubResource("GradientTexture2D_uhq6u")
 texture_scale = 2.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Character/Weapon"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerCharacter/Guy/Weapon"]
 libraries = {
 "": SubResource("AnimationLibrary_ifj76")
 }
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="Character"]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="PlayerCharacter/Guy/Weapon"]
+stream = SubResource("AudioStreamRandomizer_qjdet")
+max_polyphony = 12
+bus = &"Gun"
+
+[node name="PlayerCam" type="Camera2D" parent="PlayerCharacter" groups=["PlayerCam"]]
+unique_name_in_owner = true
+ignore_rotation = false
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+script = ExtResource("5_yhyju")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="PlayerCharacter"]
 emitting = false
 process_material = SubResource("ParticleProcessMaterial_336dp")
 texture = ExtResource("2_hxb8v")
 lifetime = 0.5
 speed_scale = 2.0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Character"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlayerCharacter"]
 scale = Vector2(5, 5)
 polygon = PackedVector2Array(-8, 8, -8, -8, 8, -8, 8, 8)
 
@@ -172,3 +198,13 @@ texture = ExtResource("4_273gj")
 
 [node name="Enemy" parent="." instance=ExtResource("6_wlofw")]
 position = Vector2(-533, -137)
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="UI" parent="UILayer" instance=ExtResource("7_0bl1n")]
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_c7faf")
+volume_db = -7.0
+autoplay = true
+bus = &"CombatFX"
