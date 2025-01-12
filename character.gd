@@ -23,7 +23,6 @@ func _ready() -> void:
 	timer.timeout.connect(shoot)
 	
 	anim_player.speed_scale = anim_player.get_animation("shoot").length / timer.wait_time
-	print(anim_player.speed_scale)
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("shoot"):

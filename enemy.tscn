@@ -1,12 +1,21 @@
-[gd_scene load_steps=24 format=3 uid="uid://dxltm8yxw2x6b"]
+[gd_scene load_steps=29 format=3 uid="uid://dxltm8yxw2x6b"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_hl6sq"]
 [ext_resource type="Texture2D" uid="uid://b4nsrxrh8n0ws" path="res://guy.png" id="1_u1mvx"]
 [ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="2_jr5le"]
+[ext_resource type="Script" path="res://blood_trail.gd" id="3_e6pve"]
 [ext_resource type="AudioStream" uid="uid://cip2pq21pfw12" path="res://sfx/gross.mp3" id="4_es6o0"]
 [ext_resource type="AudioStream" uid="uid://gyly1s1q7e5p" path="res://sfx/Sonido emisora policía Nacional de España CNP [W_yDzYA4Sn0].mp3" id="5_x4ovb"]
 [ext_resource type="Script" path="res://walkie.gd" id="6_ngfkg"]
 [ext_resource type="AudioStream" uid="uid://dmstne36r2kb8" path="res://sfx/over.mp3" id="7_27fxb"]
+[ext_resource type="Texture2D" uid="uid://dghykfpcsyjr2" path="res://blood_trail.png" id="8_keerp"]
+
+[sub_resource type="Curve" id="Curve_3wi8r"]
+_data = [Vector2(0.51579, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_r6e3o"]
+colors = PackedColorArray(0.640625, 0, 0, 1, 0.203125, 0, 0, 1)
 
 [sub_resource type="Gradient" id="Gradient_tx54n"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -133,13 +142,45 @@ scale_max = 6.0
 color_ramp = SubResource("GradientTexture1D_s8n6l")
 alpha_curve = SubResource("CurveTexture_2onxe")
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_toctn"]
+lifetime_randomness = 1.0
+particle_flag_disable_z = true
+angle_min = -214.9
+angle_max = 347.4
+spread = 180.0
+initial_velocity_min = 139.69
+initial_velocity_max = 323.81
+gravity = Vector3(0, 300, 0)
+damping_curve = SubResource("CurveTexture_1stvn")
+scale_min = 6.0
+scale_max = 6.0
+color_ramp = SubResource("GradientTexture1D_s8n6l")
+alpha_curve = SubResource("CurveTexture_2onxe")
+
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_hl6sq")
 
 [node name="Guy" type="Sprite2D" parent="."]
 modulate = Color(0.446548, 0.313675, 0.545393, 1)
+z_index = 1
 scale = Vector2(5, 5)
 texture = ExtResource("1_u1mvx")
+
+[node name="BloodTrail" type="Node" parent="."]
+script = ExtResource("3_e6pve")
+
+[node name="Line2D" type="Line2D" parent="BloodTrail"]
+texture_filter = 1
+texture_repeat = 2
+points = PackedVector2Array(1, 0, 12, 145, -5, 288)
+width = 90.0
+width_curve = SubResource("Curve_3wi8r")
+gradient = SubResource("Gradient_r6e3o")
+texture = ExtResource("8_keerp")
+texture_mode = 1
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
 
 [node name="Weapon" type="Node2D" parent="."]
 
@@ -198,6 +239,14 @@ process_material = SubResource("ParticleProcessMaterial_6ovtn")
 lifetime = 0.5
 one_shot = true
 explosiveness = 0.65
+
+[node name="BloodBlowUp" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 1000
+process_material = SubResource("ParticleProcessMaterial_toctn")
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.85
 
 [node name="Walkie" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(2, -1)

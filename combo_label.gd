@@ -39,7 +39,6 @@ func _process(delta: float) -> void:
 	# IS IT LAGGY?
 	AudioServer.set_bus_effect_enabled(1, 0, combo_fov > 0)
 	low_pass.cutoff_hz = max(100, 12000 - (combo_fov * (12000 / 0.2)))
-	print(low_pass.cutoff_hz)
 
 func _on_timer_timeout() -> void:
 	can_lower = true

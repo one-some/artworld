@@ -148,7 +148,6 @@ scale = Vector2(5, 5)
 texture = ExtResource("2_hxb8v")
 
 [node name="Weapon" type="Node2D" parent="PlayerCharacter/Guy"]
-scale = Vector2(1, 1)
 script = ExtResource("5_ilojw")
 
 [node name="Blaster" type="Sprite2D" parent="PlayerCharacter/Guy/Weapon"]
