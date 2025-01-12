@@ -1,8 +1,11 @@
-extends Label
+extends Control
 
+@onready var combo_label = $ComboLabel
 @onready var low_pass = AudioServer.get_bus_effect(1, 0)
 @onready var cam = get_tree().get_first_node_in_group("PlayerCam")
 var combo = 0
+var actual_score = 0
+var visual_score = 0
 
 var target_combo_fov = 0
 var combo_fov = 0
@@ -10,19 +13,30 @@ var can_lower = true
 
 func do_combo_fx(increasing):
 	if increasing:
+		actual_score += 1000
 		combo += 1
 		
 		can_lower = false
-		$Timer.start()
+		$ComboLabel/Timer.start()
 		target_combo_fov += 0.01
 	else:
 		combo = 0
-	self.text = "x%s" % combo
+	combo_label.text = "x%s" % combo
 
 func _bullet_report(status: BulletManager.BulletOutcome):
 	do_combo_fx(status == BulletManager.BulletOutcome.HIT)
 
 func _process(delta: float) -> void:
+	# SCORE
+	visual_score = move_toward(
+		visual_score,
+		actual_score,
+		#abs(actual_score -  visual_score) ** 0.3
+		33
+	)
+	$Score.text = str(visual_score)
+	
+	# COMBO
 	if can_lower:
 		target_combo_fov -= 0.005
 

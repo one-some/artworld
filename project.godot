@@ -27,6 +27,7 @@ enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
 WantsBulletReport=""
 PlayerCam=""
+EtcContainer=""
 
 [input]
 

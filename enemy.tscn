@@ -1,8 +1,9 @@
-[gd_scene load_steps=29 format=3 uid="uid://dxltm8yxw2x6b"]
+[gd_scene load_steps=30 format=3 uid="uid://dxltm8yxw2x6b"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_hl6sq"]
 [ext_resource type="Texture2D" uid="uid://b4nsrxrh8n0ws" path="res://guy.png" id="1_u1mvx"]
 [ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="2_jr5le"]
+[ext_resource type="Script" path="res://enemy_ai.gd" id="2_ke4gj"]
 [ext_resource type="Script" path="res://blood_trail.gd" id="3_e6pve"]
 [ext_resource type="AudioStream" uid="uid://cip2pq21pfw12" path="res://sfx/gross.mp3" id="4_es6o0"]
 [ext_resource type="AudioStream" uid="uid://gyly1s1q7e5p" path="res://sfx/Sonido emisora policía Nacional de España CNP [W_yDzYA4Sn0].mp3" id="5_x4ovb"]
@@ -11,11 +12,11 @@
 [ext_resource type="Texture2D" uid="uid://dghykfpcsyjr2" path="res://blood_trail.png" id="8_keerp"]
 
 [sub_resource type="Curve" id="Curve_3wi8r"]
-_data = [Vector2(0.51579, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.495298, 0.805729), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_r6e3o"]
-colors = PackedColorArray(0.640625, 0, 0, 1, 0.203125, 0, 0, 1)
+colors = PackedColorArray(0.203922, 0, 0, 0.152941, 0.639216, 0, 0, 0.392157)
 
 [sub_resource type="Gradient" id="Gradient_tx54n"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -160,9 +161,11 @@ alpha_curve = SubResource("CurveTexture_2onxe")
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_hl6sq")
 
+[node name="AI" type="Node" parent="."]
+script = ExtResource("2_ke4gj")
+
 [node name="Guy" type="Sprite2D" parent="."]
 modulate = Color(0.446548, 0.313675, 0.545393, 1)
-z_index = 1
 scale = Vector2(5, 5)
 texture = ExtResource("1_u1mvx")
 
@@ -172,15 +175,15 @@ script = ExtResource("3_e6pve")
 [node name="Line2D" type="Line2D" parent="BloodTrail"]
 texture_filter = 1
 texture_repeat = 2
-points = PackedVector2Array(1, 0, 12, 145, -5, 288)
+points = PackedVector2Array(1, 0, 12, 145, -361, 187, -273, 45)
 width = 90.0
 width_curve = SubResource("Curve_3wi8r")
 gradient = SubResource("Gradient_r6e3o")
 texture = ExtResource("8_keerp")
 texture_mode = 1
 joint_mode = 2
-begin_cap_mode = 2
 end_cap_mode = 2
+antialiased = true
 
 [node name="Weapon" type="Node2D" parent="."]
 

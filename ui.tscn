@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://d00vgqo7ylijr"]
+[gd_scene load_steps=4 format=3 uid="uid://d00vgqo7ylijr"]
 
-[ext_resource type="Script" path="res://combo_label.gd" id="1_vkw1l"]
+[ext_resource type="Script" path="res://score.gd" id="1_vkw1l"]
+[ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="2_xrvlq"]
+
+[sub_resource type="FontVariation" id="FontVariation_opopo"]
+base_font = ExtResource("2_xrvlq")
 
 [node name="UI" type="Control"]
 layout_mode = 3
@@ -10,18 +14,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ComboLabel" type="Label" parent="." groups=["WantsBulletReport"]]
+[node name="Score" type="Control" parent="." groups=["WantsBulletReport"]]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vkw1l")
+
+[node name="Score" type="Label" parent="Score"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = SubResource("FontVariation_opopo")
+theme_override_font_sizes/font_size = 18
+text = "Evil when i see it at night time"
+
+[node name="ComboLabel" type="Label" parent="Score"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -23.0
-offset_right = 129.0
+offset_top = 562.0
+offset_right = 265.0
+offset_bottom = 608.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 33
 text = "BLEH FOR SURE.,"
-script = ExtResource("1_vkw1l")
 
-[node name="Timer" type="Timer" parent="ComboLabel"]
+[node name="Timer" type="Timer" parent="Score/ComboLabel"]
 
-[connection signal="timeout" from="ComboLabel/Timer" to="ComboLabel" method="_on_timer_timeout"]
+[connection signal="timeout" from="Score/ComboLabel/Timer" to="Score/ComboLabel" method="_on_timer_timeout"]

@@ -57,10 +57,12 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 		pos_trans_time
 		
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tween.play()
-	await get_tree().create_timer(pos_trans_time / 2)
 	$BloodTrail.bleeding = true
+	tween.play()
 	await tween.finished
+	
+	$Guy.visible = false
+	await $BloodTrail.finish_up()
 	self.queue_free()
 
 func _process(delta: float) -> void:
