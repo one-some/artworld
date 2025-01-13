@@ -3,6 +3,8 @@ extends CharacterBody2D
 @onready var player = %PlayerCharacter
 @export var max_health = 100
 @export var health = max_health
+@onready var etc_container = get_tree().get_first_node_in_group("EtcContainer")
+@onready var blood_boom = $BloodBlowUp
 var dead = false
 var dead_pos
 
@@ -30,12 +32,24 @@ func _recieve_bullet(where: Vector2):
 	if not health:
 		die(dir_vec, damage, where)
 
+func blood_blow_up() -> void:
+	blood_boom.reparent(etc_container, false)
+	blood_boom.global_position = self.global_position
+	blood_boom.global_rotation = self.global_rotation
+	blood_boom.emitting = true
+	await get_tree().create_timer(blood_boom.lifetime / 2.0).timeout
+	
+	# https://github.com/godotengine/godot/issues/50824
+	blood_boom.interpolate = false
+	#blood_boom.fixed_fps = 0
+	blood_boom.speed_scale = 0
+
 func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 	if dead:
 		return
 	dead = true
 	print("AIIEEEE")
-	$BloodBlowUp.emitting = true
+	blood_blow_up()
 	
 	var rot = angle_difference(dir_vec.angle(), (self.global_position - hit_pos).angle()) / PI
 	var pos_trans_time = clamp(last_damage, 30, 80) / 80.0

@@ -16,7 +16,7 @@ _data = [Vector2(0.495298, 0.805729), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0
 point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_r6e3o"]
-colors = PackedColorArray(0.203922, 0, 0, 0.152941, 0.639216, 0, 0, 0.392157)
+colors = PackedColorArray(0.639216, 0, 0, 0.858824, 0.203922, 0, 0, 0.0784314)
 
 [sub_resource type="Gradient" id="Gradient_tx54n"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
