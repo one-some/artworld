@@ -10,19 +10,27 @@ enum BulletOutcome {
 	MISS,
 }
 
+enum BulletOrigin {
+	PLAYER,
+	ENEMY
+}
+
 func _ready() -> void:
 	pp.collide_with_areas = true 
 
-func add_one(location: Vector2, direction: Vector2) -> void:
+func add_one(location: Vector2, direction: Vector2, origin: BulletOrigin) -> void:
 	var l2d = $StdLine.duplicate()
 	l2d.add_point(location)
 	self.add_child(l2d)
 	lines.append({
 		"direction": direction,
-		"line": l2d
+		"line": l2d,
+		"origin": origin,
+		"origin_loc": location
 	})
 
-func bullet_report(outcome: BulletOutcome):
+func bullet_report(line, outcome: BulletOutcome):
+	if line.origin != BulletOrigin.PLAYER: return
 	for wanter in get_tree().get_nodes_in_group("WantsBulletReport"):
 		wanter._bullet_report(outcome)
 
@@ -37,7 +45,7 @@ func _process(delta: float) -> void:
 		if bvec.distance_to(player.position) > dist_threshold:
 			lines.erase(line)
 			line.line.queue_free()
-			bullet_report(BulletOutcome.MISS)
+			bullet_report(line, BulletOutcome.MISS)
 			return
 		
 		pp.position = bvec
@@ -47,11 +55,25 @@ func _process(delta: float) -> void:
 			
 			# TODO: Preserve trail somehow...
 			line.line.queue_free()
-			bullet_report(BulletOutcome.HIT)
+			bullet_report(line, BulletOutcome.HIT)
 			
 			for collision in collisions:
 				if "_recieve_bullet" not in collision["collider"]: continue
-				collision["collider"]._recieve_bullet(bvec)
+				var collider = collision["collider"]
+				
+				var damage = clamp(
+					200 * (max(0, (line.origin_loc - collider.global_position).length() - 100) ** -0.4),
+					0,
+					collider.max_health
+				)
+				
+				if collider.is_in_group("Player") and line.origin == BulletOrigin.PLAYER:
+					continue
+					
+				if collider.is_in_group("Enemy") and line.origin == BulletOrigin.ENEMY:
+					continue
+
+				collider._recieve_bullet(bvec, damage)
 			return
 		
 		bvec += line.direction

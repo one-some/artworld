@@ -10,7 +10,6 @@ room_size = 0.1
 wet = 0.1
 
 [resource]
-bus/0/mute = true
 bus/1/name = &"CombatFX"
 bus/1/solo = false
 bus/1/mute = false

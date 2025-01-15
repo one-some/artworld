@@ -1,14 +1,14 @@
 extends CharacterBody2D
 
-@onready var player = %PlayerCharacter
+@onready var player = get_tree().get_first_node_in_group("Player")
 @export var max_health = 100
 @export var health = max_health
 @onready var etc_container = get_tree().get_first_node_in_group("EtcContainer")
 @onready var blood_boom = $BloodBlowUp
 var dead = false
-var dead_pos
+var nav_target = Vector2(0, 0)
 
-func _recieve_bullet(where: Vector2):
+func _recieve_bullet(where: Vector2, damage: float):
 	if dead:
 		return
 
@@ -18,7 +18,6 @@ func _recieve_bullet(where: Vector2):
 	
 	var player_diff = self.global_position - player.global_position
 	var dir_vec = player_diff.normalized()
-	var damage = clamp(200 * (max(0, player_diff.length() - 100) ** -0.4), 0, max_health)
 	
 	blood.position += dir_vec * randf_range(-20, 20)
 	blood.amount = ceil(damage * 0.75) ** 1.2
@@ -48,7 +47,6 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 	if dead:
 		return
 	dead = true
-	print("AIIEEEE")
 	blood_blow_up()
 	
 	var rot = angle_difference(dir_vec.angle(), (self.global_position - hit_pos).angle()) / PI
@@ -57,7 +55,6 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 	
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(self, "modulate:a", 0,pos_trans_time)
-	print(rot)
 	tween.tween_property(
 		self,
 		"rotation",
@@ -67,7 +64,7 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 	tween.tween_property(
 		self,
 		"position",
-		self.position + dir_vec * last_damage * 3,
+		self.position + dir_vec * max(last_damage, 50) * 3,
 		pos_trans_time
 		
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -81,3 +78,6 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 
 func _process(delta: float) -> void:
 	$ProgressBar.value = move_toward($ProgressBar.value, health, 2)
+	
+	if dead: return
+	self.global_position = self.global_position.move_toward(nav_target, 10.0)

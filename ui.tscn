@@ -27,6 +27,7 @@ script = ExtResource("1_vkw1l")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+scale = Vector2(2, 2)
 theme_override_fonts/font = SubResource("FontVariation_opopo")
 theme_override_font_sizes/font_size = 18
 text = "Evil when i see it at night time"

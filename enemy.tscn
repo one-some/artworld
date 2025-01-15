@@ -1,12 +1,12 @@
-[gd_scene load_steps=30 format=3 uid="uid://dxltm8yxw2x6b"]
+[gd_scene load_steps=25 format=3 uid="uid://dxltm8yxw2x6b"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_hl6sq"]
 [ext_resource type="Texture2D" uid="uid://b4nsrxrh8n0ws" path="res://guy.png" id="1_u1mvx"]
-[ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="2_jr5le"]
 [ext_resource type="Script" path="res://enemy_ai.gd" id="2_ke4gj"]
 [ext_resource type="Script" path="res://blood_trail.gd" id="3_e6pve"]
 [ext_resource type="AudioStream" uid="uid://cip2pq21pfw12" path="res://sfx/gross.mp3" id="4_es6o0"]
 [ext_resource type="AudioStream" uid="uid://gyly1s1q7e5p" path="res://sfx/Sonido emisora policía Nacional de España CNP [W_yDzYA4Sn0].mp3" id="5_x4ovb"]
+[ext_resource type="PackedScene" uid="uid://d036etdvrumk" path="res://pistol.tscn" id="6_7v16s"]
 [ext_resource type="Script" path="res://walkie.gd" id="6_ngfkg"]
 [ext_resource type="AudioStream" uid="uid://dmstne36r2kb8" path="res://sfx/over.mp3" id="7_27fxb"]
 [ext_resource type="Texture2D" uid="uid://dghykfpcsyjr2" path="res://blood_trail.png" id="8_keerp"]
@@ -17,76 +17,6 @@ point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_r6e3o"]
 colors = PackedColorArray(0.639216, 0, 0, 0.858824, 0.203922, 0, 0, 0.0784314)
-
-[sub_resource type="Gradient" id="Gradient_tx54n"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_kcd7s"]
-gradient = SubResource("Gradient_tx54n")
-fill = 1
-fill_from = Vector2(0.513761, 0.495413)
-fill_to = Vector2(0.518349, 1)
-
-[sub_resource type="Animation" id="Animation_tg0an"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("PointLight2D:energy")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_jg8r8"]
-resource_name = "shoot"
-length = 0.175
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0333333, 0.1, 0.166667),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.0, -0.174533, 0.0, 0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("PointLight2D:energy")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0333333, 0.133333),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0, 5.0, 0.0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ifj76"]
-_data = {
-"RESET": SubResource("Animation_tg0an"),
-"shoot": SubResource("Animation_jg8r8")
-}
 
 [sub_resource type="Curve" id="Curve_i5gfa"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -164,6 +94,8 @@ script = ExtResource("1_hl6sq")
 [node name="AI" type="Node" parent="."]
 script = ExtResource("2_ke4gj")
 
+[node name="Fire" type="Timer" parent="AI"]
+
 [node name="Guy" type="Sprite2D" parent="."]
 modulate = Color(0.446548, 0.313675, 0.545393, 1)
 scale = Vector2(5, 5)
@@ -185,24 +117,7 @@ joint_mode = 2
 end_cap_mode = 2
 antialiased = true
 
-[node name="Weapon" type="Node2D" parent="."]
-
-[node name="Blaster" type="Sprite2D" parent="Weapon"]
-position = Vector2(37.3451, 2.57365)
-scale = Vector2(4.48141, 5.1473)
-texture = ExtResource("2_jr5le")
-
-[node name="PointLight2D" type="PointLight2D" parent="Weapon"]
-position = Vector2(57, -5)
-color = Color(1, 0.959473, 0.351562, 1)
-energy = 0.0
-texture = SubResource("GradientTexture2D_kcd7s")
-texture_scale = 2.0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Weapon"]
-libraries = {
-"": SubResource("AnimationLibrary_ifj76")
-}
+[node name="Weapon" parent="." instance=ExtResource("6_7v16s")]
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 emitting = false
@@ -263,4 +178,5 @@ script = ExtResource("6_ngfkg")
 stream = ExtResource("7_27fxb")
 bus = &"Walkie"
 
+[connection signal="timeout" from="AI/Fire" to="AI" method="_on_fire_timeout"]
 [connection signal="timeout" from="Walkie/Timer" to="Walkie" method="_on_timer_timeout"]

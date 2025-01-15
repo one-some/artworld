@@ -7,6 +7,9 @@ var last_direction = Vector2(0, 0)
 @onready var dash_particles_mat = dash_particles.process_material
 @onready var visual_body = $Guy
 
+var max_health = 200
+var health = max_health
+
 enum MovementState {
 	STANDARD,
 	DASHING
@@ -34,6 +37,9 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("dash"):
 		dash()
 
+func _recieve_bullet(where: Vector2, damage: float):
+	self.health = clamp(self.health - damage, 0, self.max_health)
+
 func dash():
 	if movement_state != MovementState.STANDARD:
 		return
@@ -53,7 +59,8 @@ func shoot() -> void:
 	var offset = PI * randf_range(-0.005, 0.005)
 	$"../BulletContainer".add_one(
 		$Guy/Weapon/PointLight2D.global_position,
-		Vector2.from_angle(visual_body.rotation + offset) * 30
+		Vector2.from_angle(visual_body.rotation + offset) * 30,
+		BulletManager.BulletOrigin.PLAYER,
 	)
 
 func dash_ease(x: float) -> float:
