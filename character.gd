@@ -7,6 +7,7 @@ var last_direction = Vector2(0, 0)
 @onready var dash_particles_mat = dash_particles.process_material
 @onready var visual_body = $Guy
 
+var scripted_rotation = false
 var max_health = 200
 var health = max_health
 
@@ -37,8 +38,9 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("dash"):
 		dash()
 
-func _recieve_bullet(where: Vector2, damage: float):
+func _recieve_bullet(where: Vector2, damage: float) -> bool:
 	self.health = clamp(self.health - damage, 0, self.max_health)
+	return true
 
 func dash():
 	if movement_state != MovementState.STANDARD:
@@ -54,6 +56,8 @@ func dash():
 	movement_state = MovementState.STANDARD
 
 func shoot() -> void:
+	if $HeatMoves.in_heat_move: return
+	
 	$Guy/Weapon.shoot_fx()
 	$PlayerCam.shake(1)
 	var offset = PI * randf_range(-0.005, 0.005)
@@ -78,11 +82,12 @@ func _physics_process(delta: float) -> void:
 		self.move_and_slide()
 		return
 	
-	var rel_cart = get_global_mouse_position() - self.global_position
-	visual_body.rotation = -atan2(rel_cart.x, rel_cart.y) + (PI / 2)
-	
-	var left = visual_body.rotation > PI / 2 and visual_body.rotation < (PI * 3 / 2)
-	$Guy/Weapon.scale.y = -1 if left else 1
+	if not scripted_rotation:
+		var rel_cart = get_global_mouse_position() - self.global_position
+		visual_body.rotation = -atan2(rel_cart.x, rel_cart.y) + (PI / 2)
+		
+		var left = visual_body.rotation > PI / 2 and visual_body.rotation < (PI * 3 / 2)
+		$Guy/Weapon.scale.y = -1 if left else 1
 	
 	var direction = Vector2(0, 0)
 	if Input.is_action_pressed("left"): direction.x -= 1

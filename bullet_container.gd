@@ -50,13 +50,23 @@ func _process(delta: float) -> void:
 		
 		pp.position = bvec
 		var collisions = get_world_2d().direct_space_state.intersect_point(pp, 3)
+		collisions = collisions.filter(
+			func(x):
+				if "dead" not in x["collider"]: return true
+				return not x["collider"].dead
+		)
+		
+		if line.origin == BulletOrigin.PLAYER:
+			collisions = collisions.filter(func(x):
+				return not x["collider"].is_in_group("Player")
+			)
+		elif line.origin == BulletOrigin.ENEMY:
+			collisions = collisions.filter(func(x):
+				return not x["collider"].is_in_group("Enemy")
+			)
+		
 		if collisions:
-			lines.erase(line)
-			
-			# TODO: Preserve trail somehow...
-			line.line.queue_free()
-			bullet_report(line, BulletOutcome.HIT)
-			
+			var bullet_hit = false
 			for collision in collisions:
 				if "_recieve_bullet" not in collision["collider"]: continue
 				var collider = collision["collider"]
@@ -66,15 +76,16 @@ func _process(delta: float) -> void:
 					0,
 					collider.max_health
 				)
-				
-				if collider.is_in_group("Player") and line.origin == BulletOrigin.PLAYER:
-					continue
-					
-				if collider.is_in_group("Enemy") and line.origin == BulletOrigin.ENEMY:
-					continue
 
-				collider._recieve_bullet(bvec, damage)
-			return
+				if collider._recieve_bullet(bvec, damage):
+					bullet_hit = true
+			
+			if bullet_hit:
+				lines.erase(line)
+				# TODO: Preserve trail somehow...
+				line.line.queue_free()
+				bullet_report(line, BulletOutcome.HIT)
+			continue
 		
 		bvec += line.direction
 		line.line.add_point(bvec, 0)

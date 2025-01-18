@@ -4,6 +4,7 @@ extends Camera2D
 @onready var std_zoom = self.zoom.x
 
 var fov_additions = {}
+var allow_rotation = true
 
 func alter_fov(key: String, add: float):
 	fov_additions[key] = add
@@ -19,4 +20,5 @@ func _process(delta: float) -> void:
 	var sum = std_zoom - Utils.sum(fov_additions.values())
 	self.zoom = Vector2(sum, sum)
 	
-	self.rotation = rotate_toward(self.rotation, 0, 0.001)
+	if not allow_rotation:
+		self.rotation = rotate_toward(self.rotation, 0, 0.001)

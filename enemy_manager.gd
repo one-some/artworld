@@ -12,7 +12,7 @@ func move_baddie(baddie: CharacterBody2D) -> void:
 	if baddie.dead: return
 	
 	var direction_to_plr = baddie.global_position.direction_to(player.global_position)
-	var target_pos = player.global_position - (direction_to_plr * 300)
+	var target_pos = player.global_position - (direction_to_plr * 200)
 
 	if baddie.global_position.distance_to(target_pos) < 10:
 		return

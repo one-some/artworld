@@ -28,11 +28,15 @@ func _bullet_report(status: BulletManager.BulletOutcome):
 
 func _process(delta: float) -> void:
 	# SCORE
+	var points_scale = (abs(actual_score - visual_score) / 1000.0) + 3.0
+	
+	$Score.scale = Vector2(points_scale, points_scale)
+	
 	visual_score = move_toward(
 		visual_score,
 		actual_score,
-		#abs(actual_score -  visual_score) ** 0.3
-		33
+		ceil(abs(actual_score -  visual_score) / 15.0)
+		#33
 	)
 	$Score.text = str(visual_score)
 	

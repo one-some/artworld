@@ -1,6 +1,7 @@
 extends Node
 
-@onready var etc_container = get_tree().get_first_node_in_group("EtcContainer")
+@onready var etc_container = Utils.from_group("EtcContainer")
+@onready var blood_container = Utils.from_group("BloodContainer")
 @onready var line = $Line2D
 @onready var blood_boom = $"../BloodBlowUp"
 var bleeding = false
@@ -20,6 +21,11 @@ func add_point(point: Vector2):
 	line.add_point(point)
 
 func finish_up():
+	bleeding = false
+	var pos = line.global_position
+	self.reparent(blood_container)
+	line.global_position = pos
+	
 	await get_tree().create_timer(3).timeout
 	var tween = create_tween()
 	tween.tween_property(line, "modulate:a", 0, 5)

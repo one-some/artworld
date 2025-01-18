@@ -1,16 +1,19 @@
 extends CharacterBody2D
 
-@onready var player = get_tree().get_first_node_in_group("Player")
+@onready var player = Utils.from_group("Player")
 @export var max_health = 100
 @export var health = max_health
-@onready var etc_container = get_tree().get_first_node_in_group("EtcContainer")
+@onready var etc_container = Utils.from_group("EtcContainer")
 @onready var blood_boom = $BloodBlowUp
+@onready var sprite = $Guy
+@onready var heat_move_manager = Utils.from_group("HeatMoveManager")
+
 var dead = false
 var nav_target = Vector2(0, 0)
 
-func _recieve_bullet(where: Vector2, damage: float):
+func _recieve_bullet(where: Vector2, damage: float) -> bool:
 	if dead:
-		return
+		return false
 
 	$AudioStreamPlayer2D.play()
 	var blood = $Blood.duplicate()
@@ -30,6 +33,7 @@ func _recieve_bullet(where: Vector2, damage: float):
 	
 	if not health:
 		die(dir_vec, damage, where)
+	return true
 
 func blood_blow_up() -> void:
 	blood_boom.reparent(etc_container, false)
@@ -44,6 +48,7 @@ func blood_blow_up() -> void:
 	blood_boom.speed_scale = 0
 
 func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
+	last_damage = clamp(last_damage, 0, 200.0)
 	if dead:
 		return
 	dead = true
@@ -71,13 +76,28 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 	$BloodTrail.bleeding = true
 	tween.play()
 	await tween.finished
-	
 	$Guy.visible = false
-	await $BloodTrail.finish_up()
+	$BloodTrail.finish_up()
+	
 	self.queue_free()
 
 func _process(delta: float) -> void:
 	$ProgressBar.value = move_toward($ProgressBar.value, health, 2)
 	
 	if dead: return
-	self.global_position = self.global_position.move_toward(nav_target, 10.0)
+	self.velocity = self.global_position.direction_to(nav_target) * delta * 23000.0
+	self.move_and_slide()
+	#self.global_position = self.global_position.move_toward(nav_target, 10.0)
+
+func _input(event):
+	if event is not InputEventMouseButton: return
+	if not event.is_pressed(): return
+	if event.button_index != MOUSE_BUTTON_LEFT: return
+	if not sprite.is_pixel_opaque(sprite.get_local_mouse_position()): return
+	heat_move_manager.select(self)
+	# FALLOUT STYLE SHOOT THING
+	#if event is InputEventMouseButton and event.pressed and not event.is_echo() and event.button_index == BUTTON_LEFT:
+		#var pos = position + offset - ( (texture.get_size() / 2.0) if centered else Vector2() ) # added this 2
+		#if Rect2(pos, texture.get_size()).has_point(event.position): # added this
+			#print('test')
+			#get_tree().set_input_as_handled() # if you don't want subsequent input callbacks to respond to this input

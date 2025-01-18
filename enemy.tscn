@@ -88,7 +88,7 @@ scale_max = 6.0
 color_ramp = SubResource("GradientTexture1D_s8n6l")
 alpha_curve = SubResource("CurveTexture_2onxe")
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
 script = ExtResource("1_hl6sq")
 
 [node name="AI" type="Node" parent="."]
