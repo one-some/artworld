@@ -1,6 +1,7 @@
 extends Node
 
 @onready var player = %PlayerCharacter
+@onready var player_guy = player.get_node("Guy")
 @onready var cam = %PlayerCam
 @onready var cam_xform = $"../CamXFORM"
 @onready var letterbox = get_tree().get_first_node_in_group("Letterbox")
@@ -28,7 +29,14 @@ func select(enemy: CharacterBody2D) -> void:
 	if not in_heat_move: return
 	selected_enemies.append(enemy)
 	enemy.get_node("Guy").self_modulate = Color("ff7a7a")
-	player.rotation = player.global_position.angle_to(enemy.global_position) + (PI / 2)
+	player_guy.rotation = PI - player_guy.global_position.angle_to(enemy.global_position)
+	
+	enemy.die(
+		player.global_position.direction_to(enemy.global_position),
+		1000.0,
+		enemy.global_position
+	)
+	
 
 func do_heat_move() -> void:
 	if in_heat_move: return
@@ -40,7 +48,7 @@ func do_heat_move() -> void:
 	var target = closest_enemy(1500.0)
 	if not target: return
 	
-	Utils.set_timescale(0.01)
+	Utils.set_timescale(0.001)
 	cam_xform.update_position = false
 	cam.allow_rotation = true
 	var rot = player.global_position.angle_to_point(target.global_position)
@@ -73,6 +81,8 @@ func do_heat_move() -> void:
 	await get_tree().create_timer(Engine.time_scale / 1.0).timeout
 	#await get_tree().create_timer(Engine.time_scale / 1.0).timeout
 	
+	#await get_tree().create_timer(1.0).timeout
+	
 	letterbox.tween_scale(0.0, 2.0)
 	
 	cam.alter_fov("heat", 0)
@@ -89,14 +99,7 @@ func do_heat_move() -> void:
 	await tween.finished
 	cam.allow_rotation = false
 	cam.position_smoothing_enabled = true
-	
-	for enemy in selected_enemies:
-		enemy.die(
-			player.global_position.direction_to(enemy.global_position),
-			1000.0,
-			enemy.global_position
-		)
-	
+
 	await letterbox.tween_scale(0.0, 1.0).finished
 	
 	Utils.set_timescale(1.0)
