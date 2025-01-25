@@ -4,11 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="2_5bf6u"]
 [ext_resource type="AudioStream" uid="uid://q00g3g4iho27" path="res://sfx/pistol.mp3" id="3_16y7x"]
 
-[sub_resource type="Gradient" id="Gradient_hg502"]
+[sub_resource type="Gradient" id="Gradient_edrcp"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_uhq6u"]
-gradient = SubResource("Gradient_hg502")
+gradient = SubResource("Gradient_edrcp")
 fill = 1
 fill_from = Vector2(0.513761, 0.495413)
 fill_to = Vector2(0.518349, 1)
@@ -80,13 +80,9 @@ random_volume_offset_db = 1.0
 streams_count = 1
 stream_0/stream = ExtResource("3_16y7x")
 
-[node name="Weapon" type="Node2D"]
+[node name="Pistol" type="Node2D"]
 script = ExtResource("1_mupys")
-
-[node name="Blaster" type="Sprite2D" parent="."]
-position = Vector2(37.3451, 2.57365)
-scale = Vector2(4.48141, 5.1473)
-texture = ExtResource("2_5bf6u")
+shoot_time = 0.15
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(57, -5)
@@ -94,6 +90,11 @@ color = Color(1, 0.959473, 0.351562, 1)
 energy = 0.0
 texture = SubResource("GradientTexture2D_uhq6u")
 texture_scale = 2.0
+
+[node name="Blaster" type="Sprite2D" parent="."]
+position = Vector2(37.3451, 2.57365)
+scale = Vector2(4.48141, 5.1473)
+texture = ExtResource("2_5bf6u")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

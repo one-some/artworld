@@ -4,19 +4,22 @@ extends Node
 @onready var player_guy = player.get_node("Guy")
 @onready var cam = %PlayerCam
 @onready var cam_xform = $"../CamXFORM"
-@onready var letterbox = get_tree().get_first_node_in_group("Letterbox")
+@onready var invert_layer = Utils.from_group("InverseEffect")
+@onready var letterbox = Utils.from_group("Letterbox")
+@onready var score_ui = Utils.from_group("ScoreUI")
+
 var in_heat_move = false
 var selected_enemies = []
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("heat"):
-		do_heat_move()
+		try_do_heat_move()
 
 func closest_enemy(max_dist: float):
 	var enemies = get_tree().get_nodes_in_group("Enemy") \
 		.map(func(x): return [x, player.global_position.distance_to(x.global_position)]) \
 		.filter(func(x): return x[1] < max_dist)
-	enemies.sort_custom(func(a, b): return [a[1] > b[1]])
+	enemies.sort_custom(func(a, b): return a[1] > b[1])
 	if not enemies: return null
 	return enemies[-1][0]
 
@@ -38,7 +41,9 @@ func select(enemy: CharacterBody2D) -> void:
 	)
 	
 
-func do_heat_move() -> void:
+func try_do_heat_move() -> void:
+	if player.heat < 50: return
+	player.alter_heat(-50)
 	if in_heat_move: return
 	in_heat_move = true
 	player.scripted_rotation = true
@@ -48,7 +53,7 @@ func do_heat_move() -> void:
 	var target = closest_enemy(1500.0)
 	if not target: return
 	
-	Utils.set_timescale(0.001)
+	Utils.set_timescale(0.005)
 	cam_xform.update_position = false
 	cam.allow_rotation = true
 	var rot = player.global_position.angle_to_point(target.global_position)
@@ -79,6 +84,7 @@ func do_heat_move() -> void:
 	
 	await lb_tween.finished
 	await get_tree().create_timer(Engine.time_scale / 1.0).timeout
+	
 	#await get_tree().create_timer(Engine.time_scale / 1.0).timeout
 	
 	#await get_tree().create_timer(1.0).timeout
@@ -96,6 +102,10 @@ func do_heat_move() -> void:
 		2.0
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	tween.play()
+	
+	await get_tree().create_timer(Engine.time_scale / 1.0).timeout
+	invert_layer.visible = true
+	
 	await tween.finished
 	cam.allow_rotation = false
 	cam.position_smoothing_enabled = true
@@ -103,6 +113,11 @@ func do_heat_move() -> void:
 	await letterbox.tween_scale(0.0, 1.0).finished
 	
 	Utils.set_timescale(1.0)
+	invert_layer.visible = false
+	
+	for enemy in selected_enemies:
+		score_ui.add_points(100_000)
+	
 	in_heat_move = false
 	deselect_all()
 	player.scripted_rotation = false

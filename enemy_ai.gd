@@ -10,7 +10,7 @@ func _ready() -> void:
 	$Fire.start()
 
 func _process(delta: float) -> void:
-	if body.dead: return
+	if body.state != Data.CharState.ACTIVE: return
 	
 	weapon_chassis.rotation = (player.global_position - body.global_position).angle()
 	
@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 	weapon_chassis.scale.y = -1 if left else 1
 
 func shoot() -> void:
-	if body.dead: return
+	if body.state != Data.CharState.ACTIVE: return
 
 	var offset = PI * randf_range(-0.005, 0.005)
 	bullet_container.add_one(

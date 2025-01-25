@@ -7,12 +7,13 @@ extends CharacterBody2D
 @onready var blood_boom = $BloodBlowUp
 @onready var sprite = $Guy
 @onready var heat_move_manager = Utils.from_group("HeatMoveManager")
+@onready var score_ui = Utils.from_group("ScoreUI")
 
-var dead = false
+var state = Data.CharState.INACTIVE
 var nav_target = Vector2(0, 0)
 
 func _recieve_bullet(where: Vector2, damage: float) -> bool:
-	if dead:
+	if state != Data.CharState.ACTIVE:
 		return false
 
 	$AudioStreamPlayer2D.play()
@@ -29,6 +30,7 @@ func _recieve_bullet(where: Vector2, damage: float) -> bool:
 	blood.emitting = true
 	blood.finished.connect(blood.queue_free)
 	
+	score_ui.add_points(damage)
 	health = clamp(health - damage, 0, max_health)
 	
 	if not health:
@@ -49,10 +51,11 @@ func blood_blow_up() -> void:
 
 func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 	last_damage = clamp(last_damage, 0, 200.0)
-	if dead:
+	if state == Data.CharState.DEAD:
 		return
-	dead = true
+	state = Data.CharState.DEAD
 	blood_blow_up()
+	player.alter_heat(10)
 	
 	var rot = angle_difference(dir_vec.angle(), (self.global_position - hit_pos).angle()) / PI
 	var pos_trans_time = clamp(last_damage, 30, 80) / 80.0
@@ -84,7 +87,7 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 func _process(delta: float) -> void:
 	$ProgressBar.value = move_toward($ProgressBar.value, health, 2)
 	
-	if dead: return
+	if state != Data.CharState.ACTIVE: return
 	self.velocity = self.global_position.direction_to(nav_target) * delta * 23000.0
 	self.move_and_slide()
 	#self.global_position = self.global_position.move_toward(nav_target, 10.0)
@@ -99,5 +102,4 @@ func _input(event):
 	#if event is InputEventMouseButton and event.pressed and not event.is_echo() and event.button_index == BUTTON_LEFT:
 		#var pos = position + offset - ( (texture.get_size() / 2.0) if centered else Vector2() ) # added this 2
 		#if Rect2(pos, texture.get_size()).has_point(event.position): # added this
-			#print('test')
 			#get_tree().set_input_as_handled() # if you don't want subsequent input callbacks to respond to this input

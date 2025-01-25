@@ -2,6 +2,17 @@ extends Node
 
 var notime_tweens = []
 
+func commatize(n):
+	n = str(n)
+	var size = n.length()
+	var s = ""
+	for i in range(size):
+		if (size - i) % 3 == 0 and i > 0:
+			s = str(s, ",", n[i])
+		else:
+			s = str(s, n[i])
+	return s
+
 func sum(iter):
 	var out = 0
 	for v in iter:
@@ -21,5 +32,4 @@ func notime_tween() -> Tween:
 func set_timescale(scale: float):
 	Engine.time_scale = scale
 	for tween in notime_tweens:
-		print(tween)
 		tween.set_speed_scale(1.0 / Engine.time_scale)

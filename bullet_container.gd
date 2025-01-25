@@ -4,6 +4,7 @@ class_name BulletManager extends Node2D
 @onready var cam = %PlayerCam
 var lines = []
 var pp = PhysicsPointQueryParameters2D.new()
+const GLOBAL_SPEED_MULTIPLIER = 60.0
 
 enum BulletOutcome {
 	HIT,
@@ -52,8 +53,8 @@ func _process(delta: float) -> void:
 		var collisions = get_world_2d().direct_space_state.intersect_point(pp, 3)
 		collisions = collisions.filter(
 			func(x):
-				if "dead" not in x["collider"]: return true
-				return not x["collider"].dead
+				if "state" not in x["collider"]: return true
+				return x["collider"].state == Data.CharState.ACTIVE
 		)
 		
 		if line.origin == BulletOrigin.PLAYER:
@@ -66,7 +67,6 @@ func _process(delta: float) -> void:
 			)
 		
 		if collisions:
-			var bullet_hit = false
 			for collision in collisions:
 				if "_recieve_bullet" not in collision["collider"]: continue
 				var collider = collision["collider"]
@@ -77,19 +77,19 @@ func _process(delta: float) -> void:
 					collider.max_health
 				)
 
-				if collider._recieve_bullet(bvec, damage):
-					bullet_hit = true
+				collider._recieve_bullet(bvec, damage)
 			
-			if bullet_hit:
-				lines.erase(line)
-				# TODO: Preserve trail somehow...
-				line.line.queue_free()
-				bullet_report(line, BulletOutcome.HIT)
+			lines.erase(line)
+			# TODO: Preserve trail somehow...
+			line.line.queue_free()
+			bullet_report(line, BulletOutcome.HIT)
 			continue
 		
-		bvec += line.direction
-		line.line.add_point(bvec, 0)
-		
-		# Bad opt
-		while line.line.get_point_count() > 7:
-			line.line.remove_point(line.line.get_point_count() - 1)
+		# Lots of ugliness and unoptimized nonsense to fix later..
+		# ..sry i needed to account for delta and timescale
+		var real_line: Line2D = line.line
+		var vec_delta = line.direction * delta * GLOBAL_SPEED_MULTIPLIER
+		bvec += vec_delta
+		real_line.clear_points()
+		for i in range(10):
+			real_line.add_point(bvec - (vec_delta / Engine.time_scale * i))

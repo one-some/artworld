@@ -9,7 +9,7 @@ func _on_spawn_timeout() -> void:
 	self.add_child(baddie)
 
 func move_baddie(baddie: CharacterBody2D) -> void:
-	if baddie.dead: return
+	if baddie.state != Data.CharState.ACTIVE: return
 	
 	var direction_to_plr = baddie.global_position.direction_to(player.global_position)
 	var target_pos = player.global_position - (direction_to_plr * 200)
