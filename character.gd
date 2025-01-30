@@ -16,6 +16,7 @@ var max_heat = heat
 enum MovementState {
 	STANDARD,
 	DASHING,
+	HEAT,
 	FROZEN
 }
 
@@ -87,7 +88,8 @@ func dash():
 	movement_state = MovementState.STANDARD
 
 func shoot() -> void:
-	if $HeatMoves.in_heat_move: return
+	if movement_state not in [MovementState.STANDARD, MovementState.DASHING]:
+		return
 	$Guy/Weapon.weapon_node.shoot(visual_body.rotation)
 
 func dash_ease(x: float) -> float:
@@ -108,6 +110,7 @@ func _physics_process(sdelta: float) -> void:
 	if movement_state != MovementState.STANDARD:
 		return
 	
+
 	if not scripted_rotation:
 		var rel_cart = get_global_mouse_position() - self.global_position
 		visual_body.rotation = -atan2(rel_cart.x, rel_cart.y) + (PI / 2)

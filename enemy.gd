@@ -54,6 +54,9 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 	if state == Data.CharState.DEAD:
 		return
 	state = Data.CharState.DEAD
+
+	$CollisionPolygon2D.disabled = true
+
 	blood_blow_up()
 	player.alter_heat(10)
 	

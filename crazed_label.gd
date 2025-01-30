@@ -4,9 +4,23 @@ extends Control
 @export var phrase: String = "":
 	set (value):
 		phrase = value
-		process_phrase(value)
-	get:
-		return phrase
+		create(phrase)
+
+@export var randomize_case: bool = true:
+	set (value):
+		randomize_case = value
+		create(phrase)
+
+@export_group("X Spacing")
+@export_range (0.0, 150.0) var x_spacing_min: float = 17.0:
+	set (value):
+		x_spacing_min = value
+		create(phrase)
+
+@export_range (0.0, 150.0) var x_spacing_max: float = 20.0:
+	set (value):
+		x_spacing_max = value
+		create(phrase)
 
 const shader_mat = preload("res://crazed_letter_shader.tres")
 const fonts = [
@@ -14,20 +28,23 @@ const fonts = [
 	preload("res://Bethany Elingston.otf"),
 ]
 
-func _ready() -> void:
-	create("Floor ONE")
-	$Panel.visible = false
 
-func process_phrase(phrase: String):
-	for child in self.get_children():
-		if child.name == "Panel": continue
+func _ready() -> void:
+	self.property_list_changed.connect(func(): create(phrase))
 
 func create(text: String):
+	for child in self.get_children():
+		if child.name == "Panel": continue
+		child.queue_free()
+
 	seed(text.hash())
+
+	if randomize_case:
+		text = text.to_lower()
 	
 	var x_px = 0
-	for c in text.to_lower():
-		if randf() < 0.5:
+	for c in text:
+		if randomize_case and randf() < 0.5:
 			c = c.to_upper()
 		
 		if c == " ":
@@ -38,7 +55,7 @@ func create(text: String):
 		var label = Label.new()
 		label.scale = Vector2(0.5, 0.5)
 		label.position.x = x_px
-		x_px += randf_range(17.0, 20.0)
+		x_px += randf_range(x_spacing_min, x_spacing_max)
 		self.add_child(label)
 		label.use_parent_material = true
 		
@@ -55,7 +72,7 @@ func create(text: String):
 		label.add_theme_stylebox_override("normal", stylebox)
 		label.label_settings = LabelSettings.new()
 		label.label_settings.font_color = Color.BLACK if text_black else Color.WHITE
-		label.label_settings.font_size = randi_range(20, 48)
+		label.label_settings.font_size = randi_range(20, 48) + 64
 		
 		var font = FontVariation.new()
 		font.variation_embolden = randf_range(0.1, 0.6)

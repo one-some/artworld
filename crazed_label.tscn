@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://drugeb3rlvu0"]
+[gd_scene load_steps=2 format=3 uid="uid://drugeb3rlvu0"]
 
 [ext_resource type="Script" path="res://crazed_label.gd" id="1_h771y"]
-[ext_resource type="PackedScene" uid="uid://c1x1s3hlgkhli" path="res://crazed_letter.tscn" id="2_cwtav"]
 
 [node name="CrazedLabel" type="Control"]
 layout_mode = 3
@@ -11,7 +10,5 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h771y")
-
-[node name="Panel" parent="." instance=ExtResource("2_cwtav")]
-visible = false
-layout_mode = 0
+x_spacing_min = null
+x_spacing_max = null
