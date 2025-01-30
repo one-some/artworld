@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b8accrah8vr1v"]
+
+[ext_resource type="Shader" path="res://crazed_label.gdshader" id="1_1do0c"]
+
+[resource]
+shader = ExtResource("1_1do0c")
+shader_parameter/rand = 1.0
+shader_parameter/angle = 1.2
+shader_parameter/sq_half_size = 20.0

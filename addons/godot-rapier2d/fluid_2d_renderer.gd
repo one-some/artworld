@@ -16,7 +16,7 @@ func _ready():
 		texture = load("res://addons/godot-rapier2d/Radial2D.svg")
 
 
-func _process(_delta):
+func _process(delta):
 	if fluid == null:
 		return
 	global_transform = fluid.global_transform

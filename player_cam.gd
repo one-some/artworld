@@ -1,10 +1,30 @@
 extends Camera2D
 
 # Assume they are equal lol
+@onready var player = Utils.from_group("Player")
 @onready var std_zoom = self.zoom.x
 
 var fov_additions = {}
 var allow_rotation = true
+
+func gawk_at(new_pos: Vector2, speed: float, duration: float):
+	player.movement_state = player.MovementState.FROZEN
+	$"../CamXFORM".update_position = false
+	self.global_position = $"..".global_position
+	
+	var tween = Utils.notime_tween().set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(self, "global_position", new_pos, speed)
+	tween.play()
+	
+	await tween.finished
+	await get_tree().create_timer(duration).timeout
+	
+	tween = Utils.notime_tween().set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(self, "global_position", $"..".global_position, speed)
+	tween.play()
+	await tween.finished
+	$"../CamXFORM".update_position = true
+	player.movement_state = player.MovementState.STANDARD
 
 func alter_fov(key: String, add: float):
 	fov_additions[key] = add

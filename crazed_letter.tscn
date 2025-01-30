@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1x1s3hlgkhli"]
+
+[ext_resource type="Material" uid="uid://b8accrah8vr1v" path="res://crazed_letter_shader.tres" id="1_mc4rl"]
+[ext_resource type="FontFile" uid="uid://v3i8nwg12ubj" path="res://Bethany Elingston.otf" id="2_ef8rw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of72i"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_mnnrb"]
+base_font = ExtResource("2_ef8rw")
+baseline_offset = 0.145
+
+[node name="Panel" type="Panel"]
+material = ExtResource("1_mc4rl")
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(20, 20)
+theme_override_styles/panel = SubResource("StyleBoxFlat_of72i")
+
+[node name="Label" type="Label" parent="."]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_mnnrb")
+theme_override_font_sizes/font_size = 32
+text = "V"
+horizontal_alignment = 1
+vertical_alignment = 1

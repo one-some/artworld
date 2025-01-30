@@ -15,7 +15,8 @@ var max_heat = heat
 
 enum MovementState {
 	STANDARD,
-	DASHING
+	DASHING,
+	FROZEN
 }
 
 const DASH_TIME_SEC = 0.1
@@ -29,8 +30,14 @@ func _ready() -> void:
 	self.call_deferred("alter_health", 0)
 	self.call_deferred("alter_heat", 0)
 
+func set_state(new_state) -> void:
+	movement_state = new_state
+	if new_state == MovementState.FROZEN:
+		timer.stop()
 
 func _input(event: InputEvent) -> void:
+	if movement_state == MovementState.FROZEN: return
+	
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
 		timer.start()
@@ -39,6 +46,14 @@ func _input(event: InputEvent) -> void:
 		
 	if Input.is_action_just_pressed("dash"):
 		dash()
+
+func closest_enemy(max_dist: float = 6000.0):
+	var enemies = get_tree().get_nodes_in_group("Enemy") \
+		.map(func(x): return [x, self.global_position.distance_to(x.global_position)]) \
+		.filter(func(x): return x[1] < max_dist)
+	enemies.sort_custom(func(a, b): return a[1] > b[1])
+	if not enemies: return null
+	return enemies[-1][0]
 
 func alter_health(delta: float) -> void:
 	self.health = clamp(self.health + round(delta), 0, self.max_health)
@@ -78,7 +93,7 @@ func shoot() -> void:
 func dash_ease(x: float) -> float:
 	return 1 - (1 - x) * (1 - x)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(sdelta: float) -> void:
 	if movement_state == MovementState.DASHING:
 		dash_particles_mat.angle_max = 180 - visual_body.global_rotation_degrees
 		dash_particles_mat.angle_min = dash_particles_mat.angle_max
@@ -88,6 +103,9 @@ func _physics_process(delta: float) -> void:
 		var fov_mult = (sin(progress * PI) / 20)
 		$PlayerCam.alter_fov("dash", fov_mult)
 		self.move_and_slide()
+		return
+	
+	if movement_state != MovementState.STANDARD:
 		return
 	
 	if not scripted_rotation:

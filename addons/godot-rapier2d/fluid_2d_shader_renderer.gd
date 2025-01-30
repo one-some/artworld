@@ -71,7 +71,7 @@ func _ready() -> void:
 		fluid.debug_draw = false
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if camera != null:
 		inside_camera.offset = camera.offset
 		inside_camera.zoom = camera.zoom

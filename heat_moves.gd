@@ -15,14 +15,6 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("heat"):
 		try_do_heat_move()
 
-func closest_enemy(max_dist: float):
-	var enemies = get_tree().get_nodes_in_group("Enemy") \
-		.map(func(x): return [x, player.global_position.distance_to(x.global_position)]) \
-		.filter(func(x): return x[1] < max_dist)
-	enemies.sort_custom(func(a, b): return a[1] > b[1])
-	if not enemies: return null
-	return enemies[-1][0]
-
 func deselect_all() -> void:
 	for enemy in selected_enemies:
 		enemy.get_node("Guy").self_modulate = Color.WHITE
@@ -50,7 +42,7 @@ func try_do_heat_move() -> void:
 	
 	deselect_all()
 	
-	var target = closest_enemy(1500.0)
+	var target = player.closest_enemy(1500.0)
 	if not target: return
 	
 	Utils.set_timescale(0.005)
