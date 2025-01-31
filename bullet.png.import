@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cho3shol3rky2"
-path="res://.godot/imported/Radial2D.svg-4380d9841bddc115105cff2016be7c6a.ctex"
+uid="uid://bre4lrha8e57f"
+path="res://.godot/imported/bullet.png-ff1424653e10246c11e3724e402c519e.ctex"
 metadata={
-"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/godot-rapier2d/Radial2D.svg"
-dest_files=["res://.godot/imported/Radial2D.svg-4380d9841bddc115105cff2016be7c6a.ctex"]
+source_file="res://bullet.png"
+dest_files=["res://.godot/imported/bullet.png-ff1424653e10246c11e3724e402c519e.ctex"]
 
 [params]
 
@@ -33,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=true
-editor/convert_colors_with_editor_theme=false

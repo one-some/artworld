@@ -49,6 +49,7 @@ ScoreUI=""
 HeatBar=""
 InverseEffect=""
 EnemyManager=""
+NewFloorVisuals=""
 
 [input]
 

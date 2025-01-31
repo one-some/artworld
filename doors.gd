@@ -7,6 +7,8 @@ extends Node2D
 var flung = false
 
 func fling() -> void:
+	flung = true
+	$TutorialLabel.hide_now()
 	print("CHAAAA!")
 	$Door.freeze = false
 	$Door2.freeze = false
@@ -39,4 +41,3 @@ func _process(delta: float) -> void:
 	var dist = self.global_position.distance_to(player.global_position)
 	if dist > 100: return
 	fling()
-	flung = true

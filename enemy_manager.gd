@@ -3,18 +3,21 @@ extends Node2D
 const EnemyScene = preload("res://enemy.tscn")
 @onready var door = $"../Doors"
 @onready var player = $"../PlayerCharacter"
-var enemies_left = 10
-var floor_done = false
-var do_spawning = false
+@onready var new_floor_visuals = Utils.from_group("NewFloorVisuals")
 
-func _ready() -> void:
-	enemies_left = 100
+var do_spawning = false
+var current_floor = {
+	number = 1,
+	spawns_left = 10,
+	in_transition = false,
+}
 
 func _on_spawn_timeout() -> void:
 	if not do_spawning: return
-	if enemies_left <= 0: return
-	enemies_left -= 1
-	if not enemies_left: floor_done = true
+	if current_floor.spawns_left <= 0: return
+	if current_floor.in_transition: return
+
+	current_floor.spawns_left -= 1
 
 	var baddie = EnemyScene.instantiate()
 	baddie.position = Vector2(randf() * 1000, randf() * 1000)
@@ -32,6 +35,29 @@ func move_baddie(baddie: CharacterBody2D) -> void:
 	
 	baddie.nav_target = target_pos
 
+func do_floor_transfer() -> void:
+	current_floor.in_transition = true
+	current_floor.number += 1
+
+	current_floor.spawns_left = 10
+
+	print("OK")
+	await get_tree().create_timer(2.0).timeout
+	await new_floor_visuals.show_floor_msg(current_floor.number)
+	await get_tree().create_timer(5.0).timeout
+	print("STOOOP")
+
+	current_floor.in_transition = false
+
 func _process(delta: float) -> void:
-	for baddie in get_tree().get_nodes_in_group("Enemy"):
+	if current_floor.in_transition: return
+
+	var alive = 0
+	var baddies = get_tree().get_nodes_in_group("Enemy")
+
+	for baddie in baddies:
+		if baddie.state != Data.CharState.DEAD: alive += 1
 		move_baddie(baddie)
+	
+	if not current_floor.spawns_left and not alive:
+		do_floor_transfer()

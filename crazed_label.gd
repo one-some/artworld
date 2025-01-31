@@ -90,5 +90,20 @@ func create(text: String):
 		#label.material.set_shader_parameter("angle", randf_range(1.2, 1.9))
 		label.text = c
 
-	
+	self.size.x = x_px	
 	randomize()
+
+func hide_letters():
+	for child in self.get_children():
+		child.modulate = Color.TRANSPARENT
+
+func do_tween_remrand(letter: Label):
+	await get_tree().create_timer(randf() * 0.10).timeout
+	var tween = create_tween()
+	tween.tween_property(letter, "modulate", Color.WHITE, 0.15).set_trans(Tween.TRANS_CUBIC)
+	tween.play()
+
+func reveal_layers():
+	for child in self.get_children():
+		do_tween_remrand(child)
+		await get_tree().create_timer(0.10).timeout

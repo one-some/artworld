@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://l7y75grcut5v"]
+[gd_scene load_steps=33 format=4 uid="uid://l7y75grcut5v"]
 
 [ext_resource type="Script" path="res://bullet_container.gd" id="1_fold2"]
 [ext_resource type="Script" path="res://main.gd" id="1_o1pmr"]
@@ -6,8 +6,10 @@
 [ext_resource type="Script" path="res://character.gd" id="2_l12iy"]
 [ext_resource type="Script" path="res://doors.gd" id="3_sqwtu"]
 [ext_resource type="PackedScene" uid="uid://d036etdvrumk" path="res://pistol.tscn" id="5_00orl"]
+[ext_resource type="Theme" uid="uid://cn0c01vapg0dl" path="res://tut_label.tres" id="5_7x8jy"]
 [ext_resource type="Texture2D" uid="uid://vugxi6xs4jd" path="res://tiles.png" id="5_awesi"]
 [ext_resource type="Script" path="res://player_cam.gd" id="5_yhyju"]
+[ext_resource type="Script" path="res://tutorial_label.gd" id="6_06urk"]
 [ext_resource type="Script" path="res://heat_moves.gd" id="6_m4pdu"]
 [ext_resource type="PackedScene" uid="uid://dxltm8yxw2x6b" path="res://enemy.tscn" id="6_wlofw"]
 [ext_resource type="PackedScene" uid="uid://d00vgqo7ylijr" path="res://ui.tscn" id="7_0bl1n"]
@@ -38,6 +40,8 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_s752b")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_75cq6"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_iius6"]
 
 [sub_resource type="Curve" id="Curve_vtsx4"]
 _data = [Vector2(0, 1), 0.0, -2.2784, 0, 0, Vector2(0.467085, 0), 0.0, 0.0, 0, 0]
@@ -131,6 +135,17 @@ region_rect = Rect2(0, 0, 16, 2)
 scale = Vector2(6, 6)
 polygon = PackedVector2Array(-16, 1, -16, -1, 0, -1, 0, 1)
 
+[node name="TutorialLabel" type="RichTextLabel" parent="Doors"]
+z_index = 1
+offset_left = -123.0
+offset_right = 132.0
+offset_bottom = 54.0
+theme = ExtResource("5_7x8jy")
+bbcode_enabled = true
+text = "Bustable doors can be [b]dash[/b]ed through."
+scroll_active = false
+script = ExtResource("6_06urk")
+
 [node name="BloodContainer" type="Node2D" parent="." groups=["BloodContainer"]]
 
 [node name="EnemyManager" type="Node2D" parent="." groups=["EnemyManager"]]
@@ -142,6 +157,9 @@ position = Vector2(-533, -137)
 [node name="Spawn" type="Timer" parent="EnemyManager"]
 wait_time = 2.0
 autostart = true
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="EnemyManager"]
+navigation_polygon = SubResource("NavigationPolygon_iius6")
 
 [node name="EtcContainer" type="Node2D" parent="." groups=["EtcContainer"]]
 
