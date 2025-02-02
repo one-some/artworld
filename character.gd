@@ -28,6 +28,8 @@ var dash_start = 0
 var movement_state = MovementState.STANDARD
 
 func _ready() -> void:
+	blood_vignette.visible = true
+	blood_vignette.modulate = Color.TRANSPARENT
 	self.call_deferred("alter_health", 0)
 	self.call_deferred("alter_heat", 0)
 	heal_timer.timeout.connect(func(): healing = true)
@@ -61,12 +63,6 @@ func alter_health(delta: float) -> void:
 
 	if delta < 0:
 		stop_healing()
-
-	var norm_health = self.health / self.max_health
-	blood_vignette.visible = norm_health <= 0.5
-
-	if not self.health:
-		self.health = self.max_health
 
 func alter_heat(delta: float) -> void:
 	self.heat = clamp(self.heat + delta, 0, self.max_heat)
@@ -133,13 +129,17 @@ func _physics_process(delta: float) -> void:
 	self.move_and_slide()
 
 func _process(delta: float) -> void:
+	var health_rat = health / max_health
+	health_rat += 0.25
+
 	blood_vignette.modulate.a = move_toward(
 		blood_vignette.modulate.a,
-		min(
+		clamp(
+			1.0 - health_rat,
+			0.0,
 			1.0,
-			1.0 - (health / max_health / 0.5)
 		),
-		delta * 0.3
+		delta * 0.6
 	)
 
 	if healing and health < max_health and heat >= 0.1:

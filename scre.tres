@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://4pq25kw66e8x"]
+
+[ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="1_jvef0"]
+
+[resource]
+base_font = ExtResource("1_jvef0")
+variation_transform = Transform2D(2, 0.5, 0, 1, 0, 0)
+spacing_glyph = 10

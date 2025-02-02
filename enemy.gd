@@ -6,11 +6,14 @@ extends CharacterBody2D
 @onready var etc_container = Utils.from_group("EtcContainer")
 @onready var blood_boom = $BloodBlowUp
 @onready var sprite = $Guy
+@onready var nav_agent = $NavAgent
 @onready var heat_move_manager = Utils.from_group("HeatMoveManager")
 @onready var score_ui = Utils.from_group("ScoreUI")
 
 var state = Data.CharState.INACTIVE
 var nav_target = Vector2(0, 0)
+# Awful hack whatever
+var first_frame = true
 
 func _recieve_bullet(where: Vector2, damage: float) -> bool:
 	if state != Data.CharState.ACTIVE:
@@ -93,11 +96,24 @@ func die(dir_vec: Vector2, last_damage: float, hit_pos: Vector2) -> void:
 
 func _process(delta: float) -> void:
 	$ProgressBar.value = move_toward($ProgressBar.value, health, 2)
-	
-	if state != Data.CharState.ACTIVE: return
-	self.velocity = self.global_position.direction_to(nav_target) * delta * 23000.0
-	self.move_and_slide()
 	#self.global_position = self.global_position.move_toward(nav_target, 10.0)
+
+func _physics_process(delta: float) -> void:
+	if first_frame:
+		first_frame = false
+		return
+
+	nav_agent.target_position = nav_target
+
+	if nav_agent.is_navigation_finished():
+		return
+	if state != Data.CharState.ACTIVE:
+		return
+
+	self.velocity = self.global_position.direction_to(
+		nav_agent.get_next_path_position()
+	) * delta * 23000.0
+	self.move_and_slide()
 
 func _input(event):
 	if event is not InputEventMouseButton: return

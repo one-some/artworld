@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://d00vgqo7ylijr"]
+[gd_scene load_steps=35 format=3 uid="uid://d00vgqo7ylijr"]
 
 [ext_resource type="Script" path="res://score.gd" id="1_vkw1l"]
 [ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="2_xrvlq"]
@@ -17,10 +17,18 @@
 offsets = PackedFloat32Array(0.283951, 0.691358, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 0.890625, 0, 1, 1, 0, 0, 1)
 
-[sub_resource type="FontVariation" id="FontVariation_opopo"]
+[sub_resource type="FontVariation" id="FontVariation_ljgdc"]
 base_font = ExtResource("2_xrvlq")
 variation_transform = Transform2D(2, 0.5, 0, 1, 0, 0)
 spacing_glyph = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_7g77b"]
+font = SubResource("FontVariation_ljgdc")
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(2, 2)
 
 [sub_resource type="Gradient" id="Gradient_pnkkb"]
 offsets = PackedFloat32Array(0.668831, 0.746753)
@@ -174,9 +182,9 @@ offset_right = 40.0
 offset_bottom = 23.0
 scale = Vector2(3, 3)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = SubResource("FontVariation_opopo")
 theme_override_font_sizes/font_size = 18
 text = "1000"
+label_settings = SubResource("LabelSettings_7g77b")
 
 [node name="ComboLabel" type="Label" parent="Score"]
 layout_mode = 1

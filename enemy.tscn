@@ -193,5 +193,7 @@ script = ExtResource("6_ngfkg")
 stream = ExtResource("7_27fxb")
 bus = &"Walkie"
 
+[node name="NavAgent" type="NavigationAgent2D" parent="."]
+
 [connection signal="timeout" from="AI/Fire" to="AI" method="_on_fire_timeout"]
 [connection signal="timeout" from="Walkie/Timer" to="Walkie" method="_on_timer_timeout"]

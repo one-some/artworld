@@ -19,8 +19,14 @@ func _on_spawn_timeout() -> void:
 
 	current_floor.spawns_left -= 1
 
+	var point = NavigationServer2D.region_get_random_point(
+		$"../NavigationRegion2D".get_rid(),
+		1,
+		true
+	)
+
 	var baddie = EnemyScene.instantiate()
-	baddie.position = Vector2(randf() * 1000, randf() * 1000)
+	baddie.position = point#Vector2(randf() * 1000, randf() * 1000)
 	baddie.state = Data.CharState.ACTIVE
 	self.add_child(baddie)
 
