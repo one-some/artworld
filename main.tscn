@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=4 uid="uid://l7y75grcut5v"]
+[gd_scene load_steps=40 format=4 uid="uid://l7y75grcut5v"]
 
 [ext_resource type="Script" path="res://bullet_container.gd" id="1_fold2"]
 [ext_resource type="Script" path="res://main.gd" id="1_o1pmr"]
@@ -16,12 +16,14 @@
 [ext_resource type="PackedScene" uid="uid://dxltm8yxw2x6b" path="res://enemy.tscn" id="6_wlofw"]
 [ext_resource type="PackedScene" uid="uid://d00vgqo7ylijr" path="res://ui.tscn" id="7_0bl1n"]
 [ext_resource type="Script" path="res://weapon_switcher.gd" id="8_wv6ty"]
+[ext_resource type="AudioStream" uid="uid://dn26yw64xys4o" path="res://sfx/smash.ogg" id="9_pksaf"]
 [ext_resource type="PackedScene" uid="uid://bsgb1bualup2h" path="res://shotgun.tscn" id="9_uk5eb"]
 [ext_resource type="Script" path="res://enemy_manager.gd" id="10_xs21x"]
 [ext_resource type="AudioStream" uid="uid://c08wa5w15wd0c" path="res://sfx/getem.mp3" id="11_c7faf"]
 [ext_resource type="Script" path="res://interaction_manager.gd" id="12_6s1xy"]
 [ext_resource type="Shader" path="res://invert.gdshader" id="14_guk37"]
 [ext_resource type="Texture2D" uid="uid://doyoc50l6vd4s" path="res://doorbig.png" id="18_fr40c"]
+[ext_resource type="Shader" path="res://vignette.gdshader" id="22_nxdsy"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_khxgy"]
 polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -43,6 +45,11 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_s752b")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_75cq6"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_cqjxq"]
+random_pitch = 1.2
+streams_count = 1
+stream_0/stream = ExtResource("9_pksaf")
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_iius6"]
 
@@ -77,6 +84,12 @@ fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ro1mm"]
 shader = ExtResource("14_guk37")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crtjn"]
+shader = ExtResource("22_nxdsy")
+shader_parameter/outer_radius = 1.0
+shader_parameter/main_alpha = 1.0
+shader_parameter/vignette_color = Color(0.574675, 0, 0, 1)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_o1pmr")
@@ -165,6 +178,10 @@ text = "Bustable doors can be [b]dash[/b]ed through."
 scroll_active = false
 script = ExtResource("6_06urk")
 
+[node name="DoorKick" type="AudioStreamPlayer2D" parent="Doors"]
+stream = SubResource("AudioStreamRandomizer_cqjxq")
+volume_db = -6.0
+
 [node name="BloodContainer" type="Node2D" parent="." groups=["BloodContainer"]]
 
 [node name="EnemyManager" type="Node2D" parent="." groups=["EnemyManager"]]
@@ -252,11 +269,24 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_bcbvx")
 texture_scale = 50.0
 
-[node name="Inverse" type="CanvasLayer" parent="." groups=["InverseEffect"]]
-visible = false
+[node name="HealTimer" type="Timer" parent="PlayerCharacter"]
+wait_time = 4.0
 
-[node name="Control" type="ColorRect" parent="Inverse"]
+[node name="PostProcessing" type="CanvasLayer" parent="." groups=["PostProcessingLayer"]]
+
+[node name="Invert" type="ColorRect" parent="PostProcessing"]
+visible = false
 material = SubResource("ShaderMaterial_ro1mm")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DamageIndicator" type="ColorRect" parent="PostProcessing" groups=["DamageIndicator"]]
+visible = false
+modulate = Color(1, 1, 1, 0.94902)
+material = SubResource("ShaderMaterial_crtjn")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -180,13 +180,12 @@ text = "1000"
 
 [node name="ComboLabel" type="Label" parent="Score"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = 562.0
-offset_right = 265.0
-offset_bottom = 608.0
-grow_vertical = 0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -265.0
+offset_bottom = 46.0
+grow_horizontal = 0
 theme_override_font_sizes/font_size = 33
 text = "BLEH FOR SURE.,"
 

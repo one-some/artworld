@@ -67,9 +67,12 @@ func _process(delta: float) -> void:
 			)
 		
 		if collisions:
+			var hit = false
 			for collision in collisions:
-				if "_recieve_bullet" not in collision["collider"]: continue
 				var collider = collision["collider"]
+				if "_recieve_bullet" not in collider: continue
+
+				hit = true
 				
 				var damage = clamp(
 					200 * (max(0, (line.origin_loc - collider.global_position).length() - 100) ** -0.4),
@@ -82,7 +85,7 @@ func _process(delta: float) -> void:
 			lines.erase(line)
 			# TODO: Preserve trail somehow...
 			line.line.queue_free()
-			bullet_report(line, BulletOutcome.HIT)
+			bullet_report(line, BulletOutcome.HIT if hit else BulletOutcome.MISS)
 			continue
 		
 		# Lots of ugliness and unoptimized nonsense to fix later..

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dxltm8yxw2x6b"]
+[gd_scene load_steps=27 format=3 uid="uid://dxltm8yxw2x6b"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_hl6sq"]
 [ext_resource type="Texture2D" uid="uid://b4nsrxrh8n0ws" path="res://guy.png" id="1_u1mvx"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://d036etdvrumk" path="res://pistol.tscn" id="6_7v16s"]
 [ext_resource type="Script" path="res://walkie.gd" id="6_ngfkg"]
 [ext_resource type="AudioStream" uid="uid://dmstne36r2kb8" path="res://sfx/over.mp3" id="7_27fxb"]
+[ext_resource type="AudioStream" uid="uid://bncxja4tyocyy" path="res://sfx/crunnnch.mp3" id="8_i1x6e"]
 [ext_resource type="Texture2D" uid="uid://dghykfpcsyjr2" path="res://blood_trail.png" id="8_keerp"]
 
 [sub_resource type="Curve" id="Curve_3wi8r"]
@@ -88,6 +89,11 @@ scale_max = 6.0
 color_ramp = SubResource("GradientTexture1D_s8n6l")
 alpha_curve = SubResource("CurveTexture_2onxe")
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ueeml"]
+random_pitch = 1.2
+streams_count = 1
+stream_0/stream = ExtResource("8_i1x6e")
+
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
 script = ExtResource("1_hl6sq")
 
@@ -166,9 +172,18 @@ lifetime = 0.5
 one_shot = true
 explosiveness = 0.85
 
+[node name="Crunch" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(2, -1)
+stream = SubResource("AudioStreamRandomizer_ueeml")
+max_distance = 1000.0
+attenuation = 2.0
+bus = &"CombatFX"
+
 [node name="Walkie" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(2, -1)
 stream = ExtResource("5_x4ovb")
+max_distance = 1000.0
+attenuation = 2.0
 bus = &"Walkie"
 script = ExtResource("6_ngfkg")
 

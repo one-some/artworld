@@ -7,6 +7,8 @@ extends Node2D
 var flung = false
 
 func fling() -> void:
+	$DoorKick.play()
+
 	flung = true
 	$TutorialLabel.hide_now()
 	print("CHAAAA!")

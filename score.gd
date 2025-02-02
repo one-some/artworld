@@ -10,14 +10,14 @@ var visual_score = 0
 
 var target_combo_fov = 0
 var combo_fov = 0
-var can_lower = true
+var lower_start = 0.0
 
 func do_combo_fx(increasing):
 	if increasing:
 		add_points(1000)
 		combo += 1
 		
-		can_lower = false
+		lower_start = Time.get_ticks_msec()
 		$ComboLabel/Timer.start()
 		target_combo_fov += 0.01
 	else:
@@ -50,7 +50,7 @@ func _process(delta: float) -> void:
 	$Score.text = str(visual_score)
 	
 	# COMBO
-	if can_lower:
+	if (Time.get_ticks_msec() - lower_start) > 1000.0:
 		target_combo_fov -= 0.005
 
 	target_combo_fov = clamp(target_combo_fov, 0, 0.2)
@@ -63,10 +63,5 @@ func _process(delta: float) -> void:
 	
 	cam.alter_fov("combo", combo_fov)
 	
-	# IS IT LAGGY?
 	AudioServer.set_bus_effect_enabled(1, 0, combo_fov > 0)
 	low_pass.cutoff_hz = max(100, 12000 - (combo_fov * (12000 / 0.2)))
-
-func _on_timer_timeout() -> void:
-	can_lower = true
-	

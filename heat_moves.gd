@@ -4,7 +4,7 @@ extends Node
 @onready var player_guy = player.get_node("Guy")
 @onready var cam = %PlayerCam
 @onready var cam_xform = $"../CamXFORM"
-@onready var invert_layer = Utils.from_group("InverseEffect")
+@onready var invert_layer = Utils.from_group("PostProcessingLayer").get_node("Invert")
 @onready var letterbox = Utils.from_group("Letterbox")
 @onready var score_ui = Utils.from_group("ScoreUI")
 

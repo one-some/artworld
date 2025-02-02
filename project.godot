@@ -47,11 +47,13 @@ HeatMoveManager=""
 HealthBar=""
 ScoreUI=""
 HeatBar=""
-InverseEffect=""
 EnemyManager=""
 NewFloorVisuals=""
 Interactor=""
 Hotbar=""
+Weapon=""
+PostProcessingLayer=""
+DamageIndicator=""
 
 [input]
 

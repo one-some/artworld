@@ -4,14 +4,17 @@ var last_direction = Vector2(0, 0)
 @onready var dash_particles = $GPUParticles2D
 @onready var dash_particles_mat = dash_particles.process_material
 @onready var visual_body = $Guy
-@onready var timer = $Guy/Weapon.weapon_timer
+@onready var weapon_manager = $Guy/Weapon
+@onready var blood_vignette: ColorRect = Utils.from_group("DamageIndicator")
+@onready var heal_timer = $HealTimer
 
 var scripted_rotation = false
-var max_health = 200
+var max_health = 200.0
 var health = max_health
 
-var heat = 100
+var heat = 100.0
 var max_heat = heat
+var healing = false
 
 enum MovementState {
 	STANDARD,
@@ -25,25 +28,21 @@ var dash_start = 0
 var movement_state = MovementState.STANDARD
 
 func _ready() -> void:
-	self.add_child(timer)
-	timer.timeout.connect(shoot)
-	
 	self.call_deferred("alter_health", 0)
 	self.call_deferred("alter_heat", 0)
+	heal_timer.timeout.connect(func(): healing = true)
+
+func stop_healing() -> void:
+	healing = false
+	heal_timer.start()
 
 func set_state(new_state) -> void:
 	movement_state = new_state
 	if new_state == MovementState.FROZEN:
-		timer.stop()
+		weapon_manager.stop_shooting()
 
 func _input(event: InputEvent) -> void:
 	if movement_state == MovementState.FROZEN: return
-	
-	if Input.is_action_just_pressed("shoot"):
-		shoot()
-		timer.start()
-	elif Input.is_action_just_released("shoot"):
-		timer.stop()
 		
 	if Input.is_action_just_pressed("dash"):
 		dash()
@@ -57,13 +56,20 @@ func closest_enemy(max_dist: float = 6000.0):
 	return enemies[-1][0]
 
 func alter_health(delta: float) -> void:
-	self.health = clamp(self.health + round(delta), 0, self.max_health)
+	self.health = clamp(self.health + delta, 0, self.max_health)
 	Utils.from_group("HealthBar").set_value(self.health, self.max_health)
+
+	if delta < 0:
+		stop_healing()
+
+	var norm_health = self.health / self.max_health
+	blood_vignette.visible = norm_health <= 0.5
+
 	if not self.health:
 		self.health = self.max_health
 
 func alter_heat(delta: float) -> void:
-	self.heat = clamp(self.heat + round(delta), 0, self.max_heat)
+	self.heat = clamp(self.heat + delta, 0, self.max_heat)
 	Utils.from_group("HeatBar").set_value(self.heat, self.max_heat)
 
 func _recieve_bullet(where: Vector2, damage: float) -> bool:
@@ -87,15 +93,10 @@ func dash():
 	
 	movement_state = MovementState.STANDARD
 
-func shoot() -> void:
-	if movement_state not in [MovementState.STANDARD, MovementState.DASHING]:
-		return
-	$Guy/Weapon.weapon_node.shoot(visual_body.rotation)
-
 func dash_ease(x: float) -> float:
 	return 1 - (1 - x) * (1 - x)
 
-func _physics_process(sdelta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if movement_state == MovementState.DASHING:
 		dash_particles_mat.angle_max = 180 - visual_body.global_rotation_degrees
 		dash_particles_mat.angle_min = dash_particles_mat.angle_max
@@ -130,3 +131,17 @@ func _physics_process(sdelta: float) -> void:
 	
 	self.velocity = direction.normalized() * 650
 	self.move_and_slide()
+
+func _process(delta: float) -> void:
+	blood_vignette.modulate.a = move_toward(
+		blood_vignette.modulate.a,
+		min(
+			1.0,
+			1.0 - (health / max_health / 0.5)
+		),
+		delta * 0.3
+	)
+
+	if healing and health < max_health and heat >= 0.1:
+		alter_heat(-0.1)
+		alter_health(1.0)
