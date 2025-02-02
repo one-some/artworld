@@ -1,6 +1,7 @@
 [gd_resource type="Theme" load_steps=5 format=3 uid="uid://cn0c01vapg0dl"]
 
 [ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="1_6mqae"]
+[ext_resource type="StyleBox" uid="uid://c1conro53umdh" path="res://easbax.tres" id="2_y373f"]
 
 [sub_resource type="FontVariation" id="FontVariation_t520i"]
 base_font = ExtResource("1_6mqae")
@@ -9,20 +10,7 @@ variation_embolden = 1.0
 [sub_resource type="FontVariation" id="FontVariation_i3pef"]
 base_font = ExtResource("1_6mqae")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r1nje"]
-content_margin_left = 3.0
-content_margin_top = 3.0
-content_margin_right = 3.0
-content_margin_bottom = 3.0
-bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.698039)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.466667, 0.466667, 0.466667, 1)
-anti_aliasing = false
-
 [resource]
 RichTextLabel/fonts/bold_font = SubResource("FontVariation_t520i")
 RichTextLabel/fonts/normal_font = SubResource("FontVariation_i3pef")
-RichTextLabel/styles/normal = SubResource("StyleBoxFlat_r1nje")
+RichTextLabel/styles/normal = ExtResource("2_y373f")

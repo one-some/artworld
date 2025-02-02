@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://b08igixvvk3bk"]
+
+[ext_resource type="Script" path="res://interactor.gd" id="1_tixxi"]
+[ext_resource type="Theme" uid="uid://cn0c01vapg0dl" path="res://tut_label.tres" id="2_8ungf"]
+[ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="2_t2f65"]
+[ext_resource type="StyleBox" uid="uid://c1conro53umdh" path="res://easbax.tres" id="3_dvw7c"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ohyah"]
+font = ExtResource("2_t2f65")
+font_size = 64
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_we8tp"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.698039)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.466667, 0.466667, 0.466667, 1)
+anti_aliasing = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_11vb3"]
+font = ExtResource("2_t2f65")
+
+[node name="Interactor" type="Node2D" groups=["Interactor"]]
+script = ExtResource("1_tixxi")
+label = "BLEEHH"
+
+[node name="Key" type="Label" parent="."]
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+theme = ExtResource("2_8ungf")
+theme_override_styles/normal = ExtResource("3_dvw7c")
+text = "E"
+label_settings = SubResource("LabelSettings_ohyah")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="."]
+offset_left = 34.0
+offset_top = -32.0
+offset_right = 253.0
+offset_bottom = 16.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_we8tp")
+text = "BLEEHH"
+label_settings = SubResource("LabelSettings_11vb3")

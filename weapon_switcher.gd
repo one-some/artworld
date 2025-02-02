@@ -17,6 +17,8 @@ var hotkeys = [
 	KEY_9
 ]
 
+
+@onready var hotbar = Utils.from_group("Hotbar")
 var active_weapon = Weapon.PISTOL
 var weapon_node = null
 var weapon_timer = Timer.new()
@@ -40,6 +42,7 @@ func _input(event: InputEvent) -> void:
 	var idx = hotkeys.find(event.keycode)
 	if idx == -1: return
 	if idx >= len(Weapon): return
+	hotbar.switch_slot(idx + 1)
 	
 	switch_weapon(Weapon.values()[idx])
 

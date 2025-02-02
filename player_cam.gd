@@ -5,7 +5,7 @@ extends Camera2D
 @onready var std_zoom = self.zoom.x
 
 var fov_additions = {}
-var allow_rotation = true
+var allow_rotation = false
 
 func gawk_at(new_pos: Vector2, speed: float, duration: float):
 	player.movement_state = player.MovementState.FROZEN

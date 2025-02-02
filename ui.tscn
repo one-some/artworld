@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://d00vgqo7ylijr"]
+[gd_scene load_steps=34 format=3 uid="uid://d00vgqo7ylijr"]
 
 [ext_resource type="Script" path="res://score.gd" id="1_vkw1l"]
 [ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="2_xrvlq"]
@@ -9,6 +9,9 @@
 [ext_resource type="FontFile" uid="uid://v3i8nwg12ubj" path="res://Bethany Elingston.otf" id="6_7p3wm"]
 [ext_resource type="Texture2D" uid="uid://bre4lrha8e57f" path="res://bullet.png" id="8_mkclo"]
 [ext_resource type="Script" path="res://awesome_bullets.gd" id="8_rvekd"]
+[ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="10_1gn0c"]
+[ext_resource type="Script" path="res://hotbar.gd" id="10_uo4bw"]
+[ext_resource type="Texture2D" uid="uid://c62et65syd04y" path="res://shotgun.png" id="11_xgvo5"]
 
 [sub_resource type="Gradient" id="Gradient_radsq"]
 offsets = PackedFloat32Array(0.283951, 0.691358, 1)
@@ -139,6 +142,13 @@ _data = {
 "RESET": SubResource("Animation_6kejn"),
 "reveal_floor": SubResource("Animation_ff6hq")
 }
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_av6dg"]
+bg_color = Color(0, 0, 0, 0.25098)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 
 [node name="UI" type="Control"]
 layout_mode = 3
@@ -423,6 +433,65 @@ stretch_mode = 4
 [node name="Timer" type="Timer" parent="AwesomeBullets"]
 wait_time = 2.0
 autostart = true
+
+[node name="Hotbar" type="VBoxContainer" parent="." groups=["Hotbar"]]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -171.5
+offset_right = 74.0
+offset_bottom = 171.5
+grow_vertical = 2
+script = ExtResource("10_uo4bw")
+
+[node name="Panel" type="Panel" parent="Hotbar"]
+custom_minimum_size = Vector2(74, 74)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_av6dg")
+
+[node name="TextureRect" type="TextureRect" parent="Hotbar/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.50001
+offset_top = 3.5
+offset_right = 4.49999
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.523598
+scale = Vector2(5, 5)
+pivot_offset = Vector2(4.5, 2)
+texture = ExtResource("10_1gn0c")
+stretch_mode = 5
+
+[node name="Panel2" type="Panel" parent="Hotbar"]
+custom_minimum_size = Vector2(74, 74)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_av6dg")
+
+[node name="TextureRect" type="TextureRect" parent="Hotbar/Panel2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.0
+offset_top = 3.50002
+offset_right = 7.0
+offset_bottom = 8.50002
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.523598
+scale = Vector2(4, 4)
+pivot_offset = Vector2(7, 2.5)
+texture = ExtResource("11_xgvo5")
+stretch_mode = 5
 
 [connection signal="timeout" from="Score/ComboLabel/Timer" to="Score/ComboLabel" method="_on_timer_timeout"]
 [connection signal="timeout" from="AwesomeBullets/Timer" to="AwesomeBullets" method="_on_timer_timeout"]
