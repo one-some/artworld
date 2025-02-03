@@ -52,7 +52,10 @@ func do_floor_transfer() -> void:
 	await new_floor_visuals.show_floor_msg(current_floor.number)
 	await get_tree().create_timer(5.0).timeout
 	print("STOOOP")
-
+	# UPDATE (By Jamie):
+	# Poop hahha  poop poop Poop butt sex poop sex sex sex Boobs Vagina
+	# Penis Asshole Boobs Virus Virus Virus in my computer BOOBS Weed
+	# Drugs Cocaine
 	current_floor.in_transition = false
 
 func _process(delta: float) -> void:

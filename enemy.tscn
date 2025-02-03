@@ -182,8 +182,6 @@ bus = &"CombatFX"
 [node name="Walkie" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(2, -1)
 stream = ExtResource("5_x4ovb")
-max_distance = 1000.0
-attenuation = 2.0
 bus = &"Walkie"
 script = ExtResource("6_ngfkg")
 

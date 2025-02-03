@@ -8,6 +8,7 @@ extends Node
 @onready var letterbox = Utils.from_group("Letterbox")
 @onready var score_ui = Utils.from_group("ScoreUI")
 
+var selecting_enemies = false
 var selected_enemies = []
 
 func _input(event: InputEvent) -> void:
@@ -21,6 +22,7 @@ func deselect_all() -> void:
 
 func select(enemy: CharacterBody2D) -> void:
 	if player.movement_state != player.MovementState.HEAT: return
+	if enemy in selected_enemies: return
 
 	selected_enemies.append(enemy)
 	enemy.get_node("Guy").self_modulate = Color("ff7a7a")
@@ -43,6 +45,7 @@ func try_do_heat_move() -> void:
 	player.scripted_rotation = true
 	
 	deselect_all()
+	selecting_enemies = true
 	
 	var target = player.closest_enemy(1500.0)
 	if not target: return
@@ -111,6 +114,7 @@ func try_do_heat_move() -> void:
 	
 	for enemy in selected_enemies:
 		score_ui.add_points(100_000)
+	selecting_enemies = false
 	
 	player.movement_state = player.MovementState.STANDARD
 

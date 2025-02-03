@@ -3,7 +3,7 @@ extends AudioStreamPlayer2D
 @onready var guy = $".."
 
 func _ready() -> void:
-	$Timer.wait_time = randf_range(5, 20)
+	$Timer.wait_time = randf_range(1, 5)
 	$Timer.start()
 
 func die() -> void:

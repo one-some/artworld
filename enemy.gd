@@ -116,9 +116,8 @@ func _physics_process(delta: float) -> void:
 	self.move_and_slide()
 
 func _input(event):
-	if event is not InputEventMouseButton: return
-	if not event.is_pressed(): return
-	if event.button_index != MOUSE_BUTTON_LEFT: return
+	if not heat_move_manager.selecting_enemies: return
+	if event is not InputEventMouseMotion: return
 	if not sprite.is_pixel_opaque(sprite.get_local_mouse_position()): return
 	heat_move_manager.select(self)
 	# FALLOUT STYLE SHOOT THING
