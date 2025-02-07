@@ -2,7 +2,8 @@ extends Node2D
 
 enum Weapon {
 	PISTOL,
-	SHOTGUN
+	SHOTGUN,
+	UZI
 }
 
 var hotkeys = [

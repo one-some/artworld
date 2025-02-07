@@ -19,7 +19,12 @@ enum BulletOrigin {
 func _ready() -> void:
 	pp.collide_with_areas = true 
 
-func add_one(location: Vector2, direction: Vector2, origin: BulletOrigin) -> void:
+func add_one(
+	location: Vector2,
+	direction: Vector2,
+	origin: BulletOrigin,
+	speed_mult: float = 1.0
+) -> void:
 	var l2d = $StdLine.duplicate()
 	l2d.add_point(location)
 	self.add_child(l2d)
@@ -27,7 +32,8 @@ func add_one(location: Vector2, direction: Vector2, origin: BulletOrigin) -> voi
 		"direction": direction,
 		"line": l2d,
 		"origin": origin,
-		"origin_loc": location
+		"origin_loc": location,
+		"speed_mult": speed_mult,
 	})
 
 func bullet_report(line, outcome: BulletOutcome):

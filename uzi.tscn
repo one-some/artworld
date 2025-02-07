@@ -1,0 +1,106 @@
+[gd_scene load_steps=10 format=3 uid="uid://dnlev2pnvvtf1"]
+
+[ext_resource type="Script" path="res://uzi.gd" id="1_gy4q8"]
+[ext_resource type="Texture2D" uid="uid://c62et65syd04y" path="res://shotgun.png" id="2_tro3x"]
+[ext_resource type="AudioStream" uid="uid://q00g3g4iho27" path="res://sfx/pistol.mp3" id="3_nq28o"]
+
+[sub_resource type="Gradient" id="Gradient_hg502"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_me7wl"]
+gradient = SubResource("Gradient_hg502")
+fill = 1
+fill_from = Vector2(0.513761, 0.495413)
+fill_to = Vector2(0.518349, 1)
+
+[sub_resource type="Animation" id="Animation_tg0an"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_jg8r8"]
+resource_name = "shoot"
+length = 0.175
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.1, 0.166667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.174533, 0.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.133333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 5.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ifj76"]
+_data = {
+"RESET": SubResource("Animation_tg0an"),
+"shoot": SubResource("Animation_jg8r8")
+}
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_auw8i"]
+random_pitch = 1.1
+random_volume_offset_db = 1.0
+streams_count = 1
+stream_0/stream = ExtResource("3_nq28o")
+
+[node name="UZI" type="Node2D" groups=["Weapon"]]
+script = ExtResource("1_gy4q8")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(69, -5)
+color = Color(1, 0.959473, 0.351562, 1)
+energy = 0.0
+texture = SubResource("GradientTexture2D_me7wl")
+texture_scale = 2.0
+
+[node name="Blaster" type="Sprite2D" parent="."]
+position = Vector2(37.3451, 2.57365)
+scale = Vector2(4.48141, 5.1473)
+texture = ExtResource("2_tro3x")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ifj76")
+}
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_auw8i")
+max_polyphony = 12
+bus = &"Gun"

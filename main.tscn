@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=4 uid="uid://l7y75grcut5v"]
+[gd_scene load_steps=54 format=4 uid="uid://l7y75grcut5v"]
 
 [ext_resource type="Script" path="res://bullet_container.gd" id="1_fold2"]
 [ext_resource type="Script" path="res://main.gd" id="1_o1pmr"]
@@ -26,6 +26,7 @@
 [ext_resource type="Shader" path="res://invert.gdshader" id="14_guk37"]
 [ext_resource type="Texture2D" uid="uid://doyoc50l6vd4s" path="res://doorbig.png" id="18_fr40c"]
 [ext_resource type="Shader" path="res://saturate.gdshader" id="22_4n1pw"]
+[ext_resource type="PackedScene" uid="uid://dnlev2pnvvtf1" path="res://uzi.tscn" id="22_jhghh"]
 [ext_resource type="Shader" path="res://vignette.gdshader" id="22_nxdsy"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_khxgy"]
@@ -427,6 +428,8 @@ script = ExtResource("8_wv6ty")
 
 [node name="SHOTGUN" parent="PlayerCharacter/Guy/Weapon" instance=ExtResource("9_uk5eb")]
 position = Vector2(0, -1)
+
+[node name="UZI" parent="PlayerCharacter/Guy/Weapon" instance=ExtResource("22_jhghh")]
 
 [node name="PlayerCam" type="Camera2D" parent="PlayerCharacter" groups=["PlayerCam"]]
 unique_name_in_owner = true

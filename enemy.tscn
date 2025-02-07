@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dxltm8yxw2x6b"]
+[gd_scene load_steps=32 format=3 uid="uid://dxltm8yxw2x6b"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_hl6sq"]
 [ext_resource type="Texture2D" uid="uid://b4nsrxrh8n0ws" path="res://guy.png" id="1_u1mvx"]
@@ -11,6 +11,10 @@
 [ext_resource type="AudioStream" uid="uid://dmstne36r2kb8" path="res://sfx/over.mp3" id="7_27fxb"]
 [ext_resource type="AudioStream" uid="uid://bncxja4tyocyy" path="res://sfx/crunnnch.mp3" id="8_i1x6e"]
 [ext_resource type="Texture2D" uid="uid://dghykfpcsyjr2" path="res://blood_trail.png" id="8_keerp"]
+[ext_resource type="AudioStream" uid="uid://kwb8jw06b3vl" path="res://sfx/steps/1.mp3" id="12_18nlm"]
+[ext_resource type="AudioStream" uid="uid://bk6yln6s6im04" path="res://sfx/steps/2.mp3" id="13_xpjb8"]
+[ext_resource type="AudioStream" uid="uid://btmq462b55rhg" path="res://sfx/steps/4.mp3" id="15_n2aa4"]
+[ext_resource type="Script" path="res://steps.gd" id="16_i3lf4"]
 
 [sub_resource type="Curve" id="Curve_3wi8r"]
 _data = [Vector2(0.495298, 0.805729), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -93,6 +97,12 @@ alpha_curve = SubResource("CurveTexture_2onxe")
 random_pitch = 1.2
 streams_count = 1
 stream_0/stream = ExtResource("8_i1x6e")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_48pqh"]
+streams_count = 3
+stream_0/stream = ExtResource("12_18nlm")
+stream_1/stream = ExtResource("13_xpjb8")
+stream_2/stream = ExtResource("15_n2aa4")
 
 [node name="Enemy" type="CharacterBody2D" groups=["Enemy"]]
 script = ExtResource("1_hl6sq")
@@ -192,6 +202,14 @@ stream = ExtResource("7_27fxb")
 bus = &"Walkie"
 
 [node name="NavAgent" type="NavigationAgent2D" parent="."]
+
+[node name="Steps" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_48pqh")
+volume_db = 6.0
+max_distance = 1000.0
+attenuation = 2.0
+max_polyphony = 2
+script = ExtResource("16_i3lf4")
 
 [connection signal="timeout" from="AI/Fire" to="AI" method="_on_fire_timeout"]
 [connection signal="timeout" from="Walkie/Timer" to="Walkie" method="_on_timer_timeout"]
