@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://d00vgqo7ylijr"]
+[gd_scene load_steps=37 format=3 uid="uid://d00vgqo7ylijr"]
 
 [ext_resource type="Script" path="res://score.gd" id="1_vkw1l"]
 [ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="2_xrvlq"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://tajxaqunt6ka" path="res://blaster.png" id="10_1gn0c"]
 [ext_resource type="Script" path="res://hotbar.gd" id="10_uo4bw"]
 [ext_resource type="Texture2D" uid="uid://c62et65syd04y" path="res://shotgun.png" id="11_xgvo5"]
+[ext_resource type="Texture2D" uid="uid://cuikdodshjlrl" path="res://uzi.png" id="13_wy5nf"]
+[ext_resource type="Texture2D" uid="uid://dl2wpfc1wf6a1" path="res://sniper.png" id="14_q0pso"]
 
 [sub_resource type="Gradient" id="Gradient_radsq"]
 offsets = PackedFloat32Array(0.283951, 0.691358, 1)
@@ -521,7 +523,31 @@ grow_vertical = 2
 rotation = 0.523598
 scale = Vector2(4, 4)
 pivot_offset = Vector2(7, 2.5)
-texture = ExtResource("11_xgvo5")
+texture = ExtResource("13_wy5nf")
+stretch_mode = 5
+
+[node name="Panel4" type="Panel" parent="Hotbar"]
+custom_minimum_size = Vector2(74, 74)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_av6dg")
+
+[node name="TextureRect" type="TextureRect" parent="Hotbar/Panel4"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -7.50001
+offset_right = 6.0
+offset_bottom = -2.50001
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.523598
+scale = Vector2(4, 4)
+pivot_offset = Vector2(7, 2.5)
+texture = ExtResource("14_q0pso")
 stretch_mode = 5
 
 [connection signal="timeout" from="Score/ComboLabel/Timer" to="Score/ComboLabel" method="_on_timer_timeout"]
