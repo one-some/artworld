@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=5 format=3 uid="uid://cn0c01vapg0dl"]
 
 [ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="1_6mqae"]
-[ext_resource type="StyleBox" uid="uid://c1conro53umdh" path="res://easbax.tres" id="2_y373f"]
+[ext_resource type="StyleBox" uid="uid://8r08dk4t2ut" path="res://tutoeirl_bg.tres" id="2_1je7s"]
 
 [sub_resource type="FontVariation" id="FontVariation_t520i"]
 base_font = ExtResource("1_6mqae")
@@ -13,4 +13,4 @@ base_font = ExtResource("1_6mqae")
 [resource]
 RichTextLabel/fonts/bold_font = SubResource("FontVariation_t520i")
 RichTextLabel/fonts/normal_font = SubResource("FontVariation_i3pef")
-RichTextLabel/styles/normal = ExtResource("2_y373f")
+RichTextLabel/styles/normal = ExtResource("2_1je7s")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=4 uid="uid://l7y75grcut5v"]
+[gd_scene load_steps=53 format=4 uid="uid://l7y75grcut5v"]
 
 [ext_resource type="Script" path="res://bullet_container.gd" id="1_fold2"]
 [ext_resource type="Script" path="res://main.gd" id="1_o1pmr"]
@@ -8,15 +8,17 @@
 [ext_resource type="Script" path="res://next_floor.gd" id="3_uh0uj"]
 [ext_resource type="PackedScene" uid="uid://b08igixvvk3bk" path="res://interactor.tscn" id="4_8oio5"]
 [ext_resource type="PackedScene" uid="uid://d036etdvrumk" path="res://pistol.tscn" id="5_00orl"]
-[ext_resource type="Theme" uid="uid://cn0c01vapg0dl" path="res://tut_label.tres" id="5_7x8jy"]
 [ext_resource type="Texture2D" uid="uid://vugxi6xs4jd" path="res://tiles.png" id="5_awesi"]
 [ext_resource type="Script" path="res://player_cam.gd" id="5_yhyju"]
 [ext_resource type="Script" path="res://tutorial_label.gd" id="6_06urk"]
 [ext_resource type="Script" path="res://heat_moves.gd" id="6_m4pdu"]
 [ext_resource type="PackedScene" uid="uid://dxltm8yxw2x6b" path="res://enemy.tscn" id="6_wlofw"]
 [ext_resource type="PackedScene" uid="uid://d00vgqo7ylijr" path="res://ui.tscn" id="7_0bl1n"]
+[ext_resource type="StyleBox" uid="uid://8r08dk4t2ut" path="res://tutoeirl_bg.tres" id="8_7lgid"]
 [ext_resource type="Script" path="res://weapon_switcher.gd" id="8_wv6ty"]
+[ext_resource type="FontFile" uid="uid://bo6fccxo5momi" path="res://MS Gothic.ttf" id="9_m4nsr"]
 [ext_resource type="AudioStream" uid="uid://dn26yw64xys4o" path="res://sfx/smash.ogg" id="9_pksaf"]
+[ext_resource type="Script" path="res://wasd_tutorial.gd" id="9_s8vb8"]
 [ext_resource type="PackedScene" uid="uid://bsgb1bualup2h" path="res://shotgun.tscn" id="9_uk5eb"]
 [ext_resource type="Script" path="res://enemy_manager.gd" id="10_xs21x"]
 [ext_resource type="AudioStream" uid="uid://c08wa5w15wd0c" path="res://sfx/getem.mp3" id="11_c7faf"]
@@ -62,6 +64,41 @@ fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_75cq6"]
+
+[sub_resource type="FontVariation" id="FontVariation_aqkux"]
+base_font = ExtResource("9_m4nsr")
+
+[sub_resource type="FontVariation" id="FontVariation_pqvvv"]
+base_font = ExtResource("9_m4nsr")
+variation_embolden = 0.7
+
+[sub_resource type="FontVariation" id="FontVariation_hsixp"]
+base_font = ExtResource("9_m4nsr")
+variation_embolden = 0.7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gwrat"]
+content_margin_left = 60.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.698039)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.466667, 0.466667, 0.466667, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y72il"]
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.698039)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.466667, 0.466667, 0.466667, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_j2koi"]
+font = ExtResource("9_m4nsr")
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_cqjxq"]
 random_pitch = 1.2
@@ -210,11 +247,120 @@ z_index = 1
 offset_left = -123.0
 offset_right = 132.0
 offset_bottom = 54.0
-theme = ExtResource("5_7x8jy")
+theme_override_fonts/normal_font = SubResource("FontVariation_aqkux")
+theme_override_fonts/bold_font = SubResource("FontVariation_pqvvv")
+theme_override_styles/normal = ExtResource("8_7lgid")
 bbcode_enabled = true
 text = "Bustable doors can be [b]dash[/b]ed through."
 scroll_active = false
 script = ExtResource("6_06urk")
+
+[node name="WASDTutorial" type="RichTextLabel" parent="Doors"]
+z_index = 1
+offset_left = -403.0
+offset_top = -87.0
+offset_right = -148.0
+offset_bottom = -33.0
+theme_override_fonts/normal_font = ExtResource("9_m4nsr")
+theme_override_fonts/bold_font = SubResource("FontVariation_hsixp")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gwrat")
+bbcode_enabled = true
+text = "You can move using the [b]WASD[/b] keys."
+scroll_active = false
+script = ExtResource("9_s8vb8")
+
+[node name="WASD" type="Control" parent="Doors/WASDTutorial"]
+anchors_preset = 0
+offset_left = 7.0
+offset_top = 8.0
+offset_right = 47.0
+offset_bottom = 48.0
+
+[node name="W" type="Label" parent="Doors/WASDTutorial/WASD"]
+layout_mode = 0
+offset_left = 16.0
+offset_right = 32.0
+offset_bottom = 19.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_y72il")
+text = "W"
+label_settings = SubResource("LabelSettings_j2koi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="S" type="Label" parent="Doors/WASDTutorial/WASD"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 19.0
+offset_right = 32.0
+offset_bottom = 38.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_y72il")
+text = "S
+"
+label_settings = SubResource("LabelSettings_j2koi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="A" type="Label" parent="Doors/WASDTutorial/WASD"]
+layout_mode = 0
+offset_top = 19.0
+offset_right = 16.0
+offset_bottom = 38.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_y72il")
+text = "A
+"
+label_settings = SubResource("LabelSettings_j2koi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="D" type="Label" parent="Doors/WASDTutorial/WASD"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 19.0
+offset_right = 48.0
+offset_bottom = 38.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_y72il")
+text = "D"
+label_settings = SubResource("LabelSettings_j2koi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeatTutorial" type="RichTextLabel" parent="Doors"]
+z_index = 1
+offset_left = -407.0
+offset_top = 38.0
+offset_right = -152.0
+offset_bottom = 92.0
+theme_override_fonts/normal_font = ExtResource("9_m4nsr")
+theme_override_fonts/bold_font = SubResource("FontVariation_hsixp")
+theme_override_styles/normal = SubResource("StyleBoxFlat_gwrat")
+bbcode_enabled = true
+text = "You can perform a [b]heat move[/b] using the   key."
+scroll_active = false
+
+[node name="F" type="Label" parent="Doors/HeatTutorial"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 26.0
+offset_bottom = 27.0
+scale = Vector2(2, 2)
+theme_override_styles/normal = SubResource("StyleBoxFlat_y72il")
+text = "F"
+label_settings = SubResource("LabelSettings_j2koi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="F2" type="Label" parent="Doors/HeatTutorial"]
+layout_mode = 0
+offset_left = 177.0
+offset_top = 20.0
+offset_right = 193.0
+offset_bottom = 39.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_y72il")
+text = "F"
+label_settings = SubResource("LabelSettings_j2koi")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="DoorKick" type="AudioStreamPlayer2D" parent="Doors"]
 stream = SubResource("AudioStreamRandomizer_cqjxq")
