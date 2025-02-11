@@ -1,17 +1,15 @@
-extends Node2D
+extends Weapon
 
-@onready var bullet_container = Utils.from_group("BulletContainer")
-@onready var player_cam = Utils.from_group("PlayerCam")
-@export var shoot_time: float = 0.05
+func _ready() -> void:
+	self.shoot_time = 0.05
+	self.base_damage = 2.0
 
 func shoot(rot: float):
-	player_cam.shake(1)
-	$AudioStreamPlayer2D.play()
-	$AnimationPlayer.stop()
-	$AnimationPlayer.play("shoot")
+	self.shoot_fx()
 	
-	var offset = PI * randf_range(-0.005, 0.005)
+	var offset = PI * randf_range(-0.05, 0.05)
 	bullet_container.add_one(
+		self,
 		self.get_node("PointLight2D").global_position,
 		Vector2.from_angle(rot + offset) * 30,
 		BulletManager.BulletOrigin.PLAYER,

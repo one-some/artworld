@@ -82,7 +82,6 @@ stream_0/stream = ExtResource("3_16y7x")
 
 [node name="Pistol" type="Node2D" groups=["Weapon"]]
 script = ExtResource("1_mupys")
-shoot_time = 0.15
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(57, -5)

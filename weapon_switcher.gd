@@ -1,6 +1,6 @@
 extends Node2D
 
-enum Weapon {
+enum WeaponType {
 	PISTOL,
 	SHOTGUN,
 	UZI,
@@ -21,7 +21,9 @@ var hotkeys = [
 
 @onready var player = Utils.from_group("Player")
 @onready var hotbar = Utils.from_group("Hotbar")
-var active_weapon = Weapon.PISTOL
+@onready var weapon_graph = Utils.from_group("WeaponDmgGraph")
+
+var active_weapon = WeaponType.PISTOL
 var weapon_node = null
 var timing = {
 	fire_duration_sec = 1.0,
@@ -43,12 +45,14 @@ func try_shoot() -> void:
 
 	weapon_node.shoot($"..".global_rotation)
 
-func switch_weapon(weapon: Weapon) -> void:
+func switch_weapon(weapon: WeaponType) -> void:
 	active_weapon = weapon
 	for c in self.get_children():
 		if not c.is_in_group("Weapon"): continue
 		c.visible = false
-	weapon_node = self.get_node(Weapon.find_key(active_weapon))
+	weapon_node = self.get_node(WeaponType.find_key(active_weapon))
+	weapon_graph.sample = weapon_node.damage_for
+	weapon_graph.queue_redraw()
 	weapon_node.visible = true
 	
 	timing.fire_duration_sec = float(weapon_node.shoot_time)
@@ -72,10 +76,10 @@ func _input(event: InputEvent) -> void:
 		
 		var idx = hotkeys.find(event.keycode)
 		if idx == -1: return
-		if idx >= len(Weapon): return
+		if idx >= len(WeaponType): return
 		hotbar.switch_slot(idx)
 		
-		switch_weapon(Weapon.values()[idx])
+		switch_weapon(WeaponType.values()[idx])
 
 func _process(delta: float) -> void:
 	if timing.autofire:

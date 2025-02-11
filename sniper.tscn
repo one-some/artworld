@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://bibqndj0drwtw"]
 
-[ext_resource type="Script" path="res://uzi.gd" id="1_tdx0y"]
+[ext_resource type="Script" path="res://sniper.gd" id="1_ib0i3"]
 [ext_resource type="Texture2D" uid="uid://dl2wpfc1wf6a1" path="res://sniper.png" id="2_f0in5"]
 [ext_resource type="Script" path="res://weapon_laser.gd" id="2_igtio"]
 [ext_resource type="AudioStream" uid="uid://q00g3g4iho27" path="res://sfx/pistol.mp3" id="3_iry1g"]
@@ -82,7 +82,7 @@ streams_count = 1
 stream_0/stream = ExtResource("3_iry1g")
 
 [node name="SNIPER" type="Node2D" groups=["Weapon"]]
-script = ExtResource("1_tdx0y")
+script = ExtResource("1_ib0i3")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(69, -5)
@@ -93,14 +93,13 @@ texture_scale = 2.0
 
 [node name="Laser" type="RayCast2D" parent="."]
 position = Vector2(81, -2.5)
-target_position = Vector2(500, 0)
+target_position = Vector2(3000, 0)
 script = ExtResource("2_igtio")
 
 [node name="Line2D" type="Line2D" parent="Laser"]
-rotation = 1.5708
-points = PackedVector2Array(0, 0, 29, 0)
+points = PackedVector2Array(0, 0, 20, 0)
 width = 2.0
-default_color = Color(0.866588, 0.0245122, 0, 1)
+default_color = Color(0.866588, 0, 0.0208578, 1)
 
 [node name="Blaster" type="Sprite2D" parent="."]
 position = Vector2(43.3451, 2.57365)

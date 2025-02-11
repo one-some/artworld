@@ -22,11 +22,17 @@ func shoot() -> void:
 
 	var offset = PI * randf_range(-0.005, 0.005)
 	bullet_container.add_one(
+		self,
 		$"../Weapon/PointLight2D".global_position,
 		Vector2.from_angle(weapon_chassis.rotation + offset) * 30,
 		BulletManager.BulletOrigin.ENEMY,
 	)
 	
+func damage_for(distance: float) -> float:
+	# HACK: Not the implementation of the function but treating enemy_ai like a weapon....
+	# well I guess it could be interpreted that way but that's more of a philosphical issue
+
+	return 20.0
 
 func _on_fire_timeout() -> void:
 	shoot()

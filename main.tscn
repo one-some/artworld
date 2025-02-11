@@ -46,7 +46,7 @@ texture = ExtResource("5_awesi")
 
 [sub_resource type="TileSet" id="TileSet_jn86n"]
 occlusion_layer_0/light_mask = 1
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 65
 sources/0 = SubResource("TileSetAtlasSource_s752b")
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_e7dd5"]
@@ -401,7 +401,7 @@ antialiased = true
 [node name="PlayerCharacter" type="CharacterBody2D" parent="." groups=["Player"]]
 unique_name_in_owner = true
 position = Vector2(-1442, 17)
-collision_layer = 3
+collision_layer = 131
 collision_mask = 3
 script = ExtResource("2_l12iy")
 
@@ -422,7 +422,7 @@ script = ExtResource("12_6s1xy")
 scale = Vector2(5, 5)
 texture = ExtResource("2_hxb8v")
 
-[node name="Weapon" type="Node2D" parent="PlayerCharacter/Guy"]
+[node name="Weapon" type="Node2D" parent="PlayerCharacter/Guy" groups=["WeaponSwitcher"]]
 script = ExtResource("8_wv6ty")
 
 [node name="PISTOL" parent="PlayerCharacter/Guy/Weapon" instance=ExtResource("5_00orl")]
